@@ -21,11 +21,42 @@ public class AdminController : BaseApiController
         _adminService = adminService;
     }
 
-    [HttpGet("users")]
-    public async Task<IActionResult> GetUsers()
+    [HttpGet("dashboard")]
+    public async Task<IActionResult> GetDashboard()
     {
         var actorUserId = GetCurrentUserId();
-        var users = await _adminService.GetUsersAsync(actorUserId);
+        var dashboard = await _adminService.GetDashboardAsync(actorUserId);
+        return Ok(dashboard);
+    }
+
+    [HttpGet("teams/performance")]
+    public async Task<IActionResult> GetTeamPerformance()
+    {
+        var actorUserId = GetCurrentUserId();
+        var performance = await _adminService.GetTeamPerformanceAsync(actorUserId);
+        return Ok(performance);
+    }
+
+    [HttpGet("users/performance")]
+    public async Task<IActionResult> GetUserPerformance()
+    {
+        var actorUserId = GetCurrentUserId();
+        var performance = await _adminService.GetUserPerformanceAsync(actorUserId);
+        return Ok(performance);
+    }
+
+    [HttpGet("users")]
+    public async Task<IActionResult> GetUsers([FromQuery] string? status = null)
+    {
+        var actorUserId = GetCurrentUserId();
+        bool? isApprovedFilter = status?.Trim().ToLowerInvariant() switch
+        {
+            "pending" => false,
+            "approved" => true,
+            _ => null
+        };
+
+        var users = await _adminService.GetUsersAsync(actorUserId, isApprovedFilter);
         return Ok(users);
     }
 

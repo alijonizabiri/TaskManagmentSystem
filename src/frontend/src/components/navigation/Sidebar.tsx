@@ -1,19 +1,10 @@
 import { NavLink } from 'react-router-dom'
-import {
-  ClipboardList,
-  LayoutDashboard,
-  ShieldCheck,
-  Users,
-  X,
-  KanbanSquare,
-  LogOut
-} from 'lucide-react'
+import { ClipboardList, KanbanSquare, LogOut, Settings, ShieldCheck, Users, X } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { useAuthStore } from '@/store/authStore'
 import { useTeamStore } from '@/store/teamStore'
 import { Role } from '@/types/team'
 import { useAuth } from '@/hooks/useAuth'
-import { hasRequiredRole } from '@/utils/rbac'
 
 type SidebarProps = {
   mobileOpen: boolean
@@ -24,7 +15,7 @@ type NavItem = {
   label: string
   to: string
   icon: React.ComponentType<{ className?: string }>
-  allowedRoles?: Role[]
+  end?: boolean
 }
 
 export const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
@@ -32,35 +23,26 @@ export const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
   const selectedTeamId = useTeamStore((state) => state.selectedTeamId)
   const { role } = useAuth()
 
-  const navItems: NavItem[] = [
-    {
-      label: role === Role.User ? 'My Teams' : 'Team Management',
-      to: '/team',
-      icon: LayoutDashboard,
-      allowedRoles: [Role.Admin, Role.TeamLead, Role.User]
-    },
-    { label: 'Kanban Board', to: '/kanban', icon: KanbanSquare, allowedRoles: [Role.Admin, Role.TeamLead, Role.User] },
-    { label: 'My Tasks', to: '/tasks/my', icon: ClipboardList, allowedRoles: [Role.User] },
-    { label: 'Admin Dashboard', to: '/admin', icon: ShieldCheck, allowedRoles: [Role.Admin] },
-    { label: 'User Management', to: '/admin/users', icon: Users, allowedRoles: [Role.Admin] },
-    { label: 'System Statistics', to: '/admin/stats', icon: LayoutDashboard, allowedRoles: [Role.Admin] },
-    {
-      label: 'Invite Members',
-      to: selectedTeamId ? `/teams/${selectedTeamId}/invite` : '/team',
-      icon: Users,
-      allowedRoles: [Role.Admin, Role.TeamLead]
-    }
+  const adminItems: NavItem[] = [
+    { label: 'Dashboard', to: '/admin/dashboard', icon: ShieldCheck },
+    { label: 'Teams', to: '/teams', icon: Users, end: false },
+    { label: 'User Management', to: '/admin/users', icon: Users }
   ]
 
-  const visibleNavItems = navItems.filter((item) =>
-    item.allowedRoles ? hasRequiredRole(role, item.allowedRoles) : true
-  )
+  const workspaceItems: NavItem[] = [
+    { label: 'Teams', to: '/teams', icon: Users, end: false },
+    { label: 'Kanban Board', to: '/kanban', icon: KanbanSquare },
+    { label: 'Invite Members', to: selectedTeamId ? `/teams/${selectedTeamId}/invite` : '/teams', icon: ClipboardList },
+    { label: 'Settings', to: '/settings', icon: Settings }
+  ]
+
+  const navItems = role === Role.Admin ? adminItems : workspaceItems
 
   return (
     <>
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-40 w-72 border-r border-indigo-100 bg-white px-4 pb-6 pt-5 transition-transform md:translate-x-0',
+          'fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-indigo-100 bg-white px-4 pb-6 pt-5 transition-transform md:translate-x-0',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -75,11 +57,11 @@ export const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
         </div>
 
         <nav className="space-y-1.5">
-          {visibleNavItems.map((item) => (
+          {navItems.map((item) => (
             <NavLink
               key={item.label}
               to={item.to}
-              end
+              end={item.end ?? true}
               onClick={onClose}
               className={({ isActive }) =>
                 cn(
@@ -94,21 +76,15 @@ export const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
           ))}
         </nav>
 
-        <div className="mt-8 rounded-xl border border-indigo-100 bg-indigo-50 p-3">
-          <div className="mb-2 flex items-center gap-2 text-indigo-700">
-            <ClipboardList className="h-4 w-4" />
-            <p className="text-sm font-semibold">Sprint Focus</p>
-          </div>
-          <p className="text-xs text-indigo-700/80">Prioritize high-impact tasks and keep backlog clean daily.</p>
+        <div className="mt-auto pt-6">
+          <button
+            onClick={logout}
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </button>
         </div>
-
-        <button
-          onClick={logout}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-gray-200 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          <LogOut className="h-4 w-4" />
-          Logout
-        </button>
       </aside>
 
       {mobileOpen ? <div className="fixed inset-0 z-30 bg-gray-900/30 md:hidden" onClick={onClose} /> : null}

@@ -5,6 +5,7 @@ using TaskManagement.Application.Interfaces;
 using TaskManagement.Domain.Entities;
 using TaskManagement.Domain.Enums;
 using TaskManagement.Domain.Interfaces;
+using TaskStatus = TaskManagement.Domain.Enums.TaskStatus;
 
 namespace TaskManagement.Application.Services;
 
@@ -17,11 +18,109 @@ public class AdminService : IAdminService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<UserSummaryDto>> GetUsersAsync(Guid actorUserId)
+    public async Task<AdminDashboardDto> GetDashboardAsync(Guid actorUserId)
     {
         await EnsureAdminAsync(actorUserId);
 
         var users = await _unitOfWork.Users.GetAllAsync();
+        var teams = await _unitOfWork.Teams.GetAllAsync();
+        var tasks = (await _unitOfWork.TaskItems.GetAllAsync()).ToList();
+
+        var totalTasks = tasks.Count;
+        var completedTasks = tasks.Count(t => t.Status == TaskStatus.Done);
+        var overdueTasks = tasks.Count(t => t.Deadline.HasValue && t.Deadline.Value < DateTime.UtcNow && t.Status != TaskStatus.Done);
+
+        return new AdminDashboardDto
+        {
+            TotalUsers = users.Count(),
+            TotalTeams = teams.Count(),
+            TotalTasks = totalTasks,
+            CompletedTasksPercentage = CalculatePercentage(completedTasks, totalTasks),
+            OverdueTasksPercentage = CalculatePercentage(overdueTasks, totalTasks)
+        };
+    }
+
+    public async Task<IEnumerable<TeamPerformanceDto>> GetTeamPerformanceAsync(Guid actorUserId)
+    {
+        await EnsureAdminAsync(actorUserId);
+
+        var teams = (await _unitOfWork.Teams.GetAllAsync()).ToList();
+        var tasks = (await _unitOfWork.TaskItems.GetAllAsync()).ToList();
+
+        var rows = teams
+            .Select(team =>
+            {
+                var teamTasks = tasks.Where(t => t.TeamId == team.Id).ToList();
+                var completedTasks = teamTasks.Count(t => t.Status == TaskStatus.Done);
+
+                return new TeamPerformanceDto
+                {
+                    TeamId = team.Id,
+                    TeamName = team.Name,
+                    TotalTasks = teamTasks.Count,
+                    CompletedTasks = completedTasks,
+                    CompletionPercentage = CalculatePercentage(completedTasks, teamTasks.Count)
+                };
+            })
+            .OrderByDescending(t => t.CompletionPercentage)
+            .ThenByDescending(t => t.CompletedTasks)
+            .ThenBy(t => t.TeamName)
+            .ToList();
+
+        var topTeam = rows.FirstOrDefault();
+        if (topTeam is not null)
+            topTeam.IsTopPerformer = true;
+
+        return rows;
+    }
+
+    public async Task<IEnumerable<UserPerformanceDto>> GetUserPerformanceAsync(Guid actorUserId)
+    {
+        await EnsureAdminAsync(actorUserId);
+
+        var completedTasks = (await _unitOfWork.TaskItems
+            .FindAsync(t => t.Status == TaskStatus.Done && t.AssigneeId.HasValue))
+            .ToList();
+
+        var grouped = completedTasks
+            .GroupBy(t => t.AssigneeId!.Value)
+            .Select(g => new { UserId = g.Key, CompletedTasks = g.Count() })
+            .OrderByDescending(g => g.CompletedTasks)
+            .ToList();
+
+        var result = new List<UserPerformanceDto>();
+        foreach (var row in grouped)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(row.UserId);
+            if (user is null)
+                continue;
+
+            result.Add(new UserPerformanceDto
+            {
+                UserId = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                CompletedTasks = row.CompletedTasks
+            });
+        }
+
+        return result;
+    }
+
+    public async Task<IEnumerable<UserSummaryDto>> GetUsersAsync(Guid actorUserId, bool? isApproved = null)
+    {
+        await EnsureAdminAsync(actorUserId);
+
+        IEnumerable<User> users;
+        if (isApproved.HasValue)
+        {
+            users = await _unitOfWork.Users.FindAsync(u => u.IsApproved == isApproved.Value);
+        }
+        else
+        {
+            users = await _unitOfWork.Users.GetAllAsync();
+        }
+
         return users
             .OrderByDescending(u => u.CreatedAt)
             .Select(MapToUserSummaryDto)
@@ -134,15 +233,18 @@ public class AdminService : IAdminService
 
         foreach (var team in teams.OrderByDescending(t => t.CreatedAt))
         {
-            var memberCount = (await _unitOfWork.TeamMembers
-                .FindAsync(tm => tm.TeamId == team.Id))
-                .Count();
+            var memberCount = (await _unitOfWork.TeamMembers.FindAsync(tm => tm.TeamId == team.Id)).Count();
+            var tasks = (await _unitOfWork.TaskItems.FindAsync(t => t.TeamId == team.Id)).ToList();
+            var completedTaskCount = tasks.Count(t => t.Status == TaskStatus.Done);
 
             result.Add(new TeamResponseDto
             {
                 Id = team.Id,
                 Name = team.Name,
                 MemberCount = memberCount,
+                TaskCount = tasks.Count,
+                CompletedTaskCount = completedTaskCount,
+                CompletionPercentage = CalculatePercentage(completedTaskCount, tasks.Count),
                 CreatedAt = team.CreatedAt
             });
         }
@@ -247,5 +349,13 @@ public class AdminService : IAdminService
             LastSeenAt = user.LastSeenAt,
             CreatedAt = user.CreatedAt
         };
+    }
+
+    private static decimal CalculatePercentage(int numerator, int denominator)
+    {
+        if (denominator == 0)
+            return 0m;
+
+        return Math.Round((decimal)numerator * 100m / denominator, 2);
     }
 }

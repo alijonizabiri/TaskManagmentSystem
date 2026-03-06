@@ -7,7 +7,10 @@ namespace TaskManagement.Application.Interfaces;
 
 public interface IAdminService
 {
-    Task<IEnumerable<UserSummaryDto>> GetUsersAsync(Guid actorUserId);
+    Task<AdminDashboardDto> GetDashboardAsync(Guid actorUserId);
+    Task<IEnumerable<TeamPerformanceDto>> GetTeamPerformanceAsync(Guid actorUserId);
+    Task<IEnumerable<UserPerformanceDto>> GetUserPerformanceAsync(Guid actorUserId);
+    Task<IEnumerable<UserSummaryDto>> GetUsersAsync(Guid actorUserId, bool? isApproved = null);
     Task<IEnumerable<PendingUserDto>> GetPendingUsersAsync(Guid actorUserId);
     Task<MessageResult> ApproveUserAsync(Guid actorUserId, Guid userId);
     Task<MessageResult> RejectUserAsync(Guid actorUserId, Guid userId);

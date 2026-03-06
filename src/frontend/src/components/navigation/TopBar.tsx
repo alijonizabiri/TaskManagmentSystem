@@ -1,15 +1,11 @@
 import { Menu, Bell, Search } from 'lucide-react'
-import type { Team } from '@/types/team'
 import { useAuthStore } from '@/store/authStore'
 
 type TopBarProps = {
   onOpenSidebar: () => void
-  teams: Team[]
-  selectedTeamId: string | null
-  onSelectTeam: (teamId: string) => void
 }
 
-export const TopBar = ({ onOpenSidebar, teams, selectedTeamId, onSelectTeam }: TopBarProps) => {
+export const TopBar = ({ onOpenSidebar }: TopBarProps) => {
   const user = useAuthStore((state) => state.user)
 
   return (
@@ -26,19 +22,6 @@ export const TopBar = ({ onOpenSidebar, teams, selectedTeamId, onSelectTeam }: T
             placeholder="Search tasks, members, teams"
           />
         </div>
-
-        <select
-          value={selectedTeamId ?? ''}
-          onChange={(event) => onSelectTeam(event.target.value)}
-          className="h-10 min-w-[140px] rounded-lg border border-gray-200 bg-white px-3 text-sm"
-        >
-          {teams.length ? null : <option value="">No teams</option>}
-          {teams.map((team) => (
-            <option key={team.id} value={team.id}>
-              {team.name}
-            </option>
-          ))}
-        </select>
 
         <button className="rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-gray-50">
           <Bell className="h-4 w-4" />

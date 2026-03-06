@@ -8,6 +8,15 @@ namespace TaskManagement.Application.DTOs.Team;
 public class CreateTeamDto
 {
     public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public Guid? TeamLeadId { get; set; }
+}
+
+public class UpdateTeamDto
+{
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public Guid? TeamLeadId { get; set; }
 }
 
 /// <summary>
@@ -17,8 +26,33 @@ public class TeamResponseDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
     public int MemberCount { get; set; }
+    public int TaskCount { get; set; }
+    public int CompletedTaskCount { get; set; }
+    public decimal CompletionPercentage { get; set; }
     public DateTime CreatedAt { get; set; }
+}
+
+public class TeamDetailDto
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public int MemberCount { get; set; }
+    public int TaskCount { get; set; }
+    public int CompletedTaskCount { get; set; }
+    public decimal CompletionPercentage { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
+public class TeamStatsDto
+{
+    public Guid TeamId { get; set; }
+    public int Backlog { get; set; }
+    public int Todo { get; set; }
+    public int InProgress { get; set; }
+    public int Done { get; set; }
 }
 
 /// <summary>

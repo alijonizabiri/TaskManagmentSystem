@@ -5,13 +5,12 @@ import { DashboardLayout } from '@/layouts/DashboardLayout'
 import { LoginPage } from '@/pages/LoginPage'
 import { AdminDashboardPage } from '@/pages/AdminDashboardPage'
 import { UserManagementPage } from '@/pages/UserManagementPage'
-import { SystemStatisticsPage } from '@/pages/SystemStatisticsPage'
-import { TeamDashboardPage } from '@/pages/TeamDashboardPage'
-import { KanbanBoardPage } from '@/pages/KanbanBoardPage'
-import { TaskDetailsPage } from '@/pages/TaskDetailsPage'
+import { TeamsPage } from '@/pages/TeamsPage'
+import { TeamWorkspacePage } from '@/pages/TeamWorkspacePage'
+import { TeamKanbanRedirectPage } from '@/pages/TeamKanbanRedirectPage'
 import { InviteMembersPage } from '@/pages/InviteMembersPage'
-import { ActivitiesPage } from '@/pages/ActivitiesPage'
-import { MyTasksPage } from '@/pages/MyTasksPage'
+import { SettingsPage } from '@/pages/SettingsPage'
+import { TaskDetailsPage } from '@/pages/TaskDetailsPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { useAuth } from '@/hooks/useAuth'
 import { Role } from '@/types/team'
@@ -25,10 +24,10 @@ const DashboardRedirect = () => {
   const { role } = useAuth()
 
   if (role === Role.Admin) {
-    return <Navigate to="/admin" replace />
+    return <Navigate to="/admin/dashboard" replace />
   }
 
-  return <Navigate to="/team" replace />
+  return <Navigate to="/teams" replace />
 }
 
 export const AppRouter = () => {
@@ -40,25 +39,22 @@ export const AppRouter = () => {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardRedirect />} />
+          <Route path="/team" element={<Navigate to="/teams" replace />} />
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="/activities" element={<Navigate to="/teams" replace />} />
+          <Route path="/tasks/my" element={<Navigate to="/teams" replace />} />
 
           <Route element={<DashboardLayout />}>
-            <Route path="/team" element={<TeamDashboardPage />} />
-            <Route path="/kanban" element={<KanbanBoardPage />} />
-            <Route path="/activities" element={<ActivitiesPage />} />
+            <Route path="/teams" element={<TeamsPage />} />
+            <Route path="/teams/:teamId" element={<TeamWorkspacePage />} />
+            <Route path="/teams/:teamId/invite" element={<InviteMembersPage />} />
+            <Route path="/kanban" element={<TeamKanbanRedirectPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="/tasks/:taskId" element={<TaskDetailsPage />} />
 
-            <Route element={<RoleRoute allowedRoles={[Role.User]} />}>
-              <Route path="/tasks/my" element={<MyTasksPage />} />
-            </Route>
-
             <Route element={<RoleRoute allowedRoles={[Role.Admin]} />}>
-              <Route path="/admin" element={<AdminDashboardPage />} />
+              <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
               <Route path="/admin/users" element={<UserManagementPage />} />
-              <Route path="/admin/stats" element={<SystemStatisticsPage />} />
-            </Route>
-
-            <Route element={<RoleRoute allowedRoles={[Role.Admin, Role.TeamLead]} />}>
-              <Route path="/teams/:teamId/invite" element={<InviteMembersPage />} />
             </Route>
           </Route>
         </Route>

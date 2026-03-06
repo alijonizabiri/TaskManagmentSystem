@@ -7,7 +7,7 @@ import { Activity, Clock3, FolderKanban, Users } from 'lucide-react'
 export const SystemStatisticsPage = () => {
   const usersQuery = useQuery({
     queryKey: ['admin-users'],
-    queryFn: adminService.getUsers
+    queryFn: () => adminService.getUsers()
   })
 
   const teamsQuery = useQuery({

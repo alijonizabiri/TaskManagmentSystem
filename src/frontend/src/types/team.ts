@@ -7,8 +7,31 @@ export enum Role {
 export type Team = {
   id: string
   name: string
+  description?: string | null
   memberCount: number
+  taskCount: number
+  completedTaskCount: number
+  completionPercentage: number
   createdAt: string
+}
+
+export type TeamDetail = {
+  id: string
+  name: string
+  description?: string | null
+  memberCount: number
+  taskCount: number
+  completedTaskCount: number
+  completionPercentage: number
+  createdAt: string
+}
+
+export type TeamStats = {
+  teamId: string
+  backlog: number
+  todo: number
+  inProgress: number
+  done: number
 }
 
 export type TeamMember = {
@@ -20,6 +43,14 @@ export type TeamMember = {
 
 export type CreateTeamRequest = {
   name: string
+  description?: string
+  teamLeadId?: string
+}
+
+export type UpdateTeamRequest = {
+  name: string
+  description?: string
+  teamLeadId?: string
 }
 
 export type InviteMemberRequest = {

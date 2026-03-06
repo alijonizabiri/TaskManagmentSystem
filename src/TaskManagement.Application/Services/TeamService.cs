@@ -3,6 +3,7 @@ using TaskManagement.Application.Interfaces;
 using TaskManagement.Domain.Entities;
 using TaskManagement.Domain.Enums;
 using TaskManagement.Domain.Interfaces;
+using TaskStatus = TaskManagement.Domain.Enums.TaskStatus;
 
 namespace TaskManagement.Application.Services;
 
@@ -18,10 +19,6 @@ public class TeamService : ITeamService
         _unitOfWork = unitOfWork;
     }
 
-    /// <summary>
-    /// Admin and TeamLead can create teams.
-    /// Admin remains global (no team membership); TeamLead is added to the team.
-    /// </summary>
     public async Task<TeamResponseDto> CreateTeamAsync(CreateTeamDto dto, Guid createdByUserId)
     {
         var actor = await GetApprovedActorAsync(createdByUserId);
@@ -29,80 +26,168 @@ public class TeamService : ITeamService
         if (actor.Role != Role.Admin && actor.Role != Role.TeamLead)
             throw new UnauthorizedAccessException("Only Admins and TeamLeads can create teams.");
 
+        var normalizedName = dto.Name.Trim();
+        var normalizedDescription = string.IsNullOrWhiteSpace(dto.Description) ? null : dto.Description.Trim();
+
+        if (string.IsNullOrWhiteSpace(normalizedName))
+            throw new InvalidOperationException("Team name is required.");
+
         var team = new Team
         {
             Id = Guid.NewGuid(),
-            Name = dto.Name,
+            Name = normalizedName,
+            Description = normalizedDescription,
             CreatedBy = createdByUserId,
             CreatedAt = DateTime.UtcNow
         };
 
         await _unitOfWork.Teams.AddAsync(team);
 
-        var memberCount = 0;
-        if (actor.Role == Role.TeamLead)
-        {
-            await _unitOfWork.TeamMembers.AddAsync(new TeamMember
-            {
-                Id = Guid.NewGuid(),
-                TeamId = team.Id,
-                UserId = createdByUserId,
-                Role = Role.TeamLead
-            });
-
-            memberCount = 1;
-        }
+        var assignedTeamLeadId = await ResolveTeamLeadIdAsync(dto.TeamLeadId, actor);
+        await ApplyTeamLeadMembershipAsync(team.Id, assignedTeamLeadId);
 
         await _unitOfWork.SaveChangesAsync();
 
-        return new TeamResponseDto
-        {
-            Id = team.Id,
-            Name = team.Name,
-            MemberCount = memberCount,
-            CreatedAt = team.CreatedAt
-        };
+        return await BuildTeamResponseAsync(team);
     }
 
-    /// <summary>
-    /// Returns teams where the actor is a member.
-    /// Admin users are global and do not belong to teams, so this returns empty for Admin.
-    /// </summary>
+    public async Task<TeamResponseDto> UpdateTeamAsync(Guid teamId, UpdateTeamDto dto, Guid actorUserId)
+    {
+        var actor = await GetApprovedActorAsync(actorUserId);
+
+        if (actor.Role != Role.Admin && actor.Role != Role.TeamLead)
+            throw new UnauthorizedAccessException("Only Admins and TeamLeads can update teams.");
+
+        var team = await _unitOfWork.Teams.GetByIdAsync(teamId);
+        if (team is null)
+            throw new KeyNotFoundException("Team not found.");
+
+        if (actor.Role == Role.TeamLead)
+        {
+            await EnsureTeamAccessAsync(teamId, actor);
+        }
+
+        var normalizedName = dto.Name.Trim();
+        var normalizedDescription = string.IsNullOrWhiteSpace(dto.Description) ? null : dto.Description.Trim();
+
+        if (string.IsNullOrWhiteSpace(normalizedName))
+            throw new InvalidOperationException("Team name is required.");
+
+        team.Name = normalizedName;
+        team.Description = normalizedDescription;
+        _unitOfWork.Teams.Update(team);
+
+        var assignedTeamLeadId = await ResolveTeamLeadIdAsync(dto.TeamLeadId, actor);
+        await ApplyTeamLeadMembershipAsync(team.Id, assignedTeamLeadId);
+
+        await _unitOfWork.SaveChangesAsync();
+        return await BuildTeamResponseAsync(team);
+    }
+
+    public async Task DeleteTeamAsync(Guid teamId, Guid actorUserId)
+    {
+        var actor = await GetApprovedActorAsync(actorUserId);
+
+        if (actor.Role != Role.Admin && actor.Role != Role.TeamLead)
+            throw new UnauthorizedAccessException("Only Admins and TeamLeads can delete teams.");
+
+        var team = await _unitOfWork.Teams.GetByIdAsync(teamId);
+        if (team is null)
+            throw new KeyNotFoundException("Team not found.");
+
+        if (actor.Role == Role.TeamLead)
+        {
+            await EnsureTeamAccessAsync(teamId, actor);
+        }
+
+        _unitOfWork.Teams.Remove(team);
+        await _unitOfWork.SaveChangesAsync();
+    }
+
     public async Task<IEnumerable<TeamResponseDto>> GetUserTeamsAsync(Guid userId)
     {
         var actor = await GetApprovedActorAsync(userId);
-        if (actor.Role == Role.Admin)
-            return Enumerable.Empty<TeamResponseDto>();
 
-        var memberships = await _unitOfWork.TeamMembers.FindAsync(tm => tm.UserId == userId);
-        var teamIds = memberships.Select(m => m.TeamId).Distinct().ToList();
+        IEnumerable<Team> visibleTeams;
+
+        if (actor.Role == Role.Admin)
+        {
+            visibleTeams = await _unitOfWork.Teams.GetAllAsync();
+        }
+        else
+        {
+            var memberships = await _unitOfWork.TeamMembers.FindAsync(tm => tm.UserId == userId);
+            var teamIds = memberships.Select(m => m.TeamId).Distinct().ToList();
+
+            var teams = new List<Team>();
+            foreach (var teamId in teamIds)
+            {
+                var team = await _unitOfWork.Teams.GetByIdAsync(teamId);
+                if (team is not null)
+                    teams.Add(team);
+            }
+
+            visibleTeams = teams;
+        }
 
         var result = new List<TeamResponseDto>();
-        foreach (var teamId in teamIds)
+        foreach (var team in visibleTeams.OrderBy(t => t.Name))
         {
-            var team = await _unitOfWork.Teams.GetByIdAsync(teamId);
-            if (team is null)
-                continue;
-
-            var memberCount = (await _unitOfWork.TeamMembers
-                .FindAsync(tm => tm.TeamId == teamId))
-                .Count();
-
-            result.Add(new TeamResponseDto
-            {
-                Id = team.Id,
-                Name = team.Name,
-                MemberCount = memberCount,
-                CreatedAt = team.CreatedAt
-            });
+            result.Add(await BuildTeamResponseAsync(team));
         }
 
         return result;
     }
 
-    /// <summary>
-    /// Admin can view any team members; TeamLead/User can view only teams they belong to.
-    /// </summary>
+    public async Task<TeamDetailDto> GetTeamByIdAsync(Guid teamId, Guid requestingUserId)
+    {
+        var actor = await GetApprovedActorAsync(requestingUserId);
+
+        var team = await _unitOfWork.Teams.GetByIdAsync(teamId);
+        if (team is null)
+            throw new KeyNotFoundException("Team not found.");
+
+        await EnsureTeamAccessAsync(teamId, actor);
+
+        var memberCount = (await _unitOfWork.TeamMembers.FindAsync(tm => tm.TeamId == teamId)).Count();
+        var tasks = (await _unitOfWork.TaskItems.FindAsync(t => t.TeamId == teamId)).ToList();
+        var completedTaskCount = tasks.Count(t => t.Status == TaskStatus.Done);
+
+        return new TeamDetailDto
+        {
+            Id = team.Id,
+            Name = team.Name,
+            Description = team.Description,
+            MemberCount = memberCount,
+            TaskCount = tasks.Count,
+            CompletedTaskCount = completedTaskCount,
+            CompletionPercentage = CalculatePercentage(completedTaskCount, tasks.Count),
+            CreatedAt = team.CreatedAt
+        };
+    }
+
+    public async Task<TeamStatsDto> GetTeamStatsAsync(Guid teamId, Guid requestingUserId)
+    {
+        var actor = await GetApprovedActorAsync(requestingUserId);
+
+        var team = await _unitOfWork.Teams.GetByIdAsync(teamId);
+        if (team is null)
+            throw new KeyNotFoundException("Team not found.");
+
+        await EnsureTeamAccessAsync(teamId, actor);
+
+        var tasks = (await _unitOfWork.TaskItems.FindAsync(t => t.TeamId == teamId)).ToList();
+
+        return new TeamStatsDto
+        {
+            TeamId = teamId,
+            Backlog = tasks.Count(t => t.Status == TaskStatus.Review),
+            Todo = tasks.Count(t => t.Status == TaskStatus.Todo),
+            InProgress = tasks.Count(t => t.Status == TaskStatus.InProgress),
+            Done = tasks.Count(t => t.Status == TaskStatus.Done)
+        };
+    }
+
     public async Task<IEnumerable<TeamMemberDto>> GetTeamMembersAsync(Guid teamId, Guid requestingUserId)
     {
         var team = await _unitOfWork.Teams.GetByIdAsync(teamId);
@@ -110,17 +195,9 @@ public class TeamService : ITeamService
             throw new KeyNotFoundException("Team not found.");
 
         var actor = await GetApprovedActorAsync(requestingUserId);
-        if (actor.Role != Role.Admin)
-        {
-            var isMember = await _unitOfWork.TeamMembers
-                .AnyAsync(tm => tm.TeamId == teamId && tm.UserId == requestingUserId);
+        await EnsureTeamAccessAsync(teamId, actor);
 
-            if (!isMember)
-                throw new UnauthorizedAccessException("You are not a member of this team.");
-        }
-
-        var memberships = await _unitOfWork.TeamMembers
-            .FindAsync(tm => tm.TeamId == teamId);
+        var memberships = await _unitOfWork.TeamMembers.FindAsync(tm => tm.TeamId == teamId);
 
         var result = new List<TeamMemberDto>();
         foreach (var membership in memberships)
@@ -141,9 +218,6 @@ public class TeamService : ITeamService
         return result;
     }
 
-    /// <summary>
-    /// Admin can invite to any team; TeamLead can invite only to teams they belong to.
-    /// </summary>
     public async Task<TeamInviteResponseDto> InviteToTeamAsync(Guid teamId, CreateTeamInviteDto dto, Guid invitedByUserId)
     {
         var team = await _unitOfWork.Teams.GetByIdAsync(teamId);
@@ -156,11 +230,7 @@ public class TeamService : ITeamService
 
         if (actor.Role == Role.TeamLead)
         {
-            var isTeamMember = await _unitOfWork.TeamMembers
-                .AnyAsync(tm => tm.TeamId == teamId && tm.UserId == invitedByUserId);
-
-            if (!isTeamMember)
-                throw new UnauthorizedAccessException("TeamLead can only invite members to teams they belong to.");
+            await EnsureTeamAccessAsync(teamId, actor);
         }
 
         if (dto.Role == Role.Admin)
@@ -204,5 +274,94 @@ public class TeamService : ITeamService
             throw new UnauthorizedAccessException("Only approved users can perform this action.");
 
         return actor;
+    }
+
+    private async Task EnsureTeamAccessAsync(Guid teamId, User actor)
+    {
+        if (actor.Role == Role.Admin)
+            return;
+
+        var isMember = await _unitOfWork.TeamMembers.AnyAsync(tm => tm.TeamId == teamId && tm.UserId == actor.Id);
+        if (!isMember)
+            throw new UnauthorizedAccessException("You are not a member of this team.");
+    }
+
+    private async Task<Guid?> ResolveTeamLeadIdAsync(Guid? requestedTeamLeadId, User actor)
+    {
+        Guid? assignedTeamLeadId = requestedTeamLeadId;
+
+        if (actor.Role == Role.TeamLead)
+        {
+            if (assignedTeamLeadId.HasValue && assignedTeamLeadId.Value != actor.Id)
+                throw new UnauthorizedAccessException("TeamLead can only assign themselves during team changes.");
+
+            assignedTeamLeadId = actor.Id;
+        }
+
+        if (!assignedTeamLeadId.HasValue)
+            return null;
+
+        var selectedLead = await _unitOfWork.Users.GetByIdAsync(assignedTeamLeadId.Value);
+        if (selectedLead is null || !selectedLead.IsApproved)
+            throw new InvalidOperationException("Selected TeamLead not found or not approved.");
+
+        if (selectedLead.Role != Role.TeamLead)
+            throw new InvalidOperationException("Selected user must have TeamLead role.");
+
+        return assignedTeamLeadId;
+    }
+
+    private async Task ApplyTeamLeadMembershipAsync(Guid teamId, Guid? teamLeadUserId)
+    {
+        if (!teamLeadUserId.HasValue)
+            return;
+
+        var membership = await _unitOfWork.TeamMembers
+            .FirstOrDefaultAsync(tm => tm.TeamId == teamId && tm.UserId == teamLeadUserId.Value);
+
+        if (membership is null)
+        {
+            await _unitOfWork.TeamMembers.AddAsync(new TeamMember
+            {
+                Id = Guid.NewGuid(),
+                TeamId = teamId,
+                UserId = teamLeadUserId.Value,
+                Role = Role.TeamLead
+            });
+            return;
+        }
+
+        if (membership.Role != Role.TeamLead)
+        {
+            membership.Role = Role.TeamLead;
+            _unitOfWork.TeamMembers.Update(membership);
+        }
+    }
+
+    private async Task<TeamResponseDto> BuildTeamResponseAsync(Team team)
+    {
+        var memberCount = (await _unitOfWork.TeamMembers.FindAsync(tm => tm.TeamId == team.Id)).Count();
+        var tasks = (await _unitOfWork.TaskItems.FindAsync(t => t.TeamId == team.Id)).ToList();
+        var completedTaskCount = tasks.Count(t => t.Status == TaskStatus.Done);
+
+        return new TeamResponseDto
+        {
+            Id = team.Id,
+            Name = team.Name,
+            Description = team.Description,
+            MemberCount = memberCount,
+            TaskCount = tasks.Count,
+            CompletedTaskCount = completedTaskCount,
+            CompletionPercentage = CalculatePercentage(completedTaskCount, tasks.Count),
+            CreatedAt = team.CreatedAt
+        };
+    }
+
+    private static decimal CalculatePercentage(int numerator, int denominator)
+    {
+        if (denominator == 0)
+            return 0m;
+
+        return Math.Round((decimal)numerator * 100m / denominator, 2);
     }
 }

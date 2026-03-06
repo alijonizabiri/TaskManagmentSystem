@@ -11,20 +11,23 @@ import { teamService } from '@/services/teamService'
 import { useInviteStore } from '@/store/inviteStore'
 import { Role } from '@/types/team'
 import { formatDateTime } from '@/utils/format'
+import { useAuth } from '@/hooks/useAuth'
 
 import { roleLabelMap } from '@/utils/team'
 
 export const InviteMembersPage = () => {
   const { teamId } = useParams<{ teamId: string }>()
+  const { canInviteUsers } = useAuth()
 
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<Role>(Role.User)
   const addInvite = useInviteStore((state) => state.addInvite)
   const pendingInvites = useInviteStore((state) => (teamId ? state.invitesByTeam[teamId] ?? [] : []))
 
-  const teamsQuery = useQuery({
-    queryKey: ['teams'],
-    queryFn: teamService.getTeams
+  const teamQuery = useQuery({
+    queryKey: ['team', teamId],
+    queryFn: () => teamService.getTeam(teamId!),
+    enabled: Boolean(teamId)
   })
 
   const inviteMutation = useMutation({
@@ -43,8 +46,8 @@ export const InviteMembersPage = () => {
   })
 
   const teamName = useMemo(
-    () => teamsQuery.data?.find((team) => team.id === teamId)?.name ?? 'Team',
-    [teamId, teamsQuery.data]
+    () => teamQuery.data?.name ?? 'Team',
+    [teamQuery.data]
   )
 
   return (
@@ -60,6 +63,9 @@ export const InviteMembersPage = () => {
           onSubmit={(event) => {
             event.preventDefault()
             if (!teamId) {
+              return
+            }
+            if (!canInviteUsers) {
               return
             }
             inviteMutation.mutate()
@@ -79,12 +85,15 @@ export const InviteMembersPage = () => {
             <option value={Role.User}>User</option>
           </Select>
 
-          <Button loading={inviteMutation.isPending} disabled={!teamId || !email}>
+          <Button loading={inviteMutation.isPending} disabled={!teamId || !email || !canInviteUsers}>
             <MailPlus className="mr-2 h-4 w-4" />
             Invite
           </Button>
         </form>
 
+        {!canInviteUsers ? (
+          <p className="mt-3 text-sm text-amber-700">Only Admin and TeamLead can send invitations.</p>
+        ) : null}
         {inviteMutation.error ? <p className="mt-3 text-sm text-red-600">{inviteMutation.error.message}</p> : null}
       </Card>
 

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskManagement.Application.DTOs.Common;
 using TaskManagement.Application.DTOs.Team;
 using TaskManagement.Application.Interfaces;
 
@@ -11,10 +12,12 @@ namespace TaskManagement.API.Controllers;
 public class TeamsController : BaseApiController
 {
     private readonly ITeamService _teamService;
+    private readonly ITaskService _taskService;
 
-    public TeamsController(ITeamService teamService)
+    public TeamsController(ITeamService teamService, ITaskService taskService)
     {
         _teamService = teamService;
+        _taskService = taskService;
     }
 
     /// <summary>
@@ -26,7 +29,31 @@ public class TeamsController : BaseApiController
     {
         var userId = GetCurrentUserId();
         var team = await _teamService.CreateTeamAsync(dto, userId);
-        return CreatedAtAction(nameof(GetTeamMembers), new { id = team.Id }, team);
+        return CreatedAtAction(nameof(GetTeam), new { id = team.Id }, team);
+    }
+
+    /// <summary>
+    /// Update a team. Allowed for TeamLead and Admin.
+    /// </summary>
+    [HttpPatch("{id}")]
+    [Authorize(Policy = "TeamLeadOrAdmin")]
+    public async Task<IActionResult> UpdateTeam(Guid id, [FromBody] UpdateTeamDto dto)
+    {
+        var userId = GetCurrentUserId();
+        var team = await _teamService.UpdateTeamAsync(id, dto, userId);
+        return Ok(team);
+    }
+
+    /// <summary>
+    /// Delete a team. Allowed for TeamLead and Admin.
+    /// </summary>
+    [HttpDelete("{id}")]
+    [Authorize(Policy = "TeamLeadOrAdmin")]
+    public async Task<IActionResult> DeleteTeam(Guid id)
+    {
+        var userId = GetCurrentUserId();
+        await _teamService.DeleteTeamAsync(id, userId);
+        return Ok(new MessageResponseDto("Team deleted successfully."));
     }
 
     /// <summary>
@@ -49,6 +76,38 @@ public class TeamsController : BaseApiController
         var userId = GetCurrentUserId();
         var teams = await _teamService.GetUserTeamsAsync(userId);
         return Ok(teams);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTeam(Guid id)
+    {
+        var userId = GetCurrentUserId();
+        var team = await _teamService.GetTeamByIdAsync(id, userId);
+        return Ok(team);
+    }
+
+    [HttpGet("{id}/stats")]
+    public async Task<IActionResult> GetTeamStats(Guid id)
+    {
+        var userId = GetCurrentUserId();
+        var stats = await _teamService.GetTeamStatsAsync(id, userId);
+        return Ok(stats);
+    }
+
+    [HttpGet("{id}/tasks")]
+    public async Task<IActionResult> GetTeamTasks(Guid id)
+    {
+        var userId = GetCurrentUserId();
+        var tasks = await _taskService.GetTasksAsync(userId, id);
+        return Ok(tasks);
+    }
+
+    [HttpGet("{id}/activities")]
+    public async Task<IActionResult> GetTeamActivities(Guid id, [FromQuery] Guid? createdByUserId = null)
+    {
+        var userId = GetCurrentUserId();
+        var activities = await _taskService.GetActivitiesAsync(userId, id, createdByUserId);
+        return Ok(activities);
     }
 
     /// <summary>

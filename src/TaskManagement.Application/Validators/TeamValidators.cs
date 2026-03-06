@@ -11,6 +11,22 @@ public class CreateTeamDtoValidator : AbstractValidator<CreateTeamDto>
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Team name is required.")
             .MaximumLength(100).WithMessage("Team name cannot exceed 100 characters.");
+
+        RuleFor(x => x.Description)
+            .MaximumLength(1000).WithMessage("Description cannot exceed 1000 characters.");
+    }
+}
+
+public class UpdateTeamDtoValidator : AbstractValidator<UpdateTeamDto>
+{
+    public UpdateTeamDtoValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("Team name is required.")
+            .MaximumLength(100).WithMessage("Team name cannot exceed 100 characters.");
+
+        RuleFor(x => x.Description)
+            .MaximumLength(1000).WithMessage("Description cannot exceed 1000 characters.");
     }
 }
 

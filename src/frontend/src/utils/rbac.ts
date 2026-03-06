@@ -15,7 +15,7 @@ export const canManageTeams = (role: Role | undefined) => role === Role.Admin ||
 export const canInviteUsers = (role: Role | undefined) => role === Role.Admin || role === Role.TeamLead
 
 // Product requirement: only TeamLead sees task creation actions.
-export const canCreateTasks = (role: Role | undefined) => role === Role.TeamLead
+export const canCreateTasks = (role: Role | undefined) => role === Role.TeamLead || role === Role.Admin
 
 export const canAccessTeamWorkspace = (role: Role | undefined) =>
   role === Role.Admin || role === Role.TeamLead || role === Role.User

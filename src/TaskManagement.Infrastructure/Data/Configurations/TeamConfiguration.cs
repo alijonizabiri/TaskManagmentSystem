@@ -14,6 +14,9 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
             .IsRequired()
             .HasMaxLength(100);
 
+        builder.Property(t => t.Description)
+            .HasMaxLength(1000);
+
         builder.Property(t => t.CreatedAt).HasDefaultValueSql("NOW()");
 
         // Team -> Creator (User) relationship

@@ -1,0 +1,65 @@
+# -----------------------------
+# OS files
+# -----------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# IDE / Editor
+# -----------------------------
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# -----------------------------
+# .NET build artifacts
+# -----------------------------
+**/[Bb]in/
+**/[Oo]bj/
+**/TestResults/
+artifacts/
+
+# NuGet
+*.nupkg
+*.snupkg
+
+# -----------------------------
+# Frontend (Vite / Node)
+# -----------------------------
+src/frontend/node_modules/
+src/frontend/dist/
+src/frontend/.vite/
+src/frontend/.cache/
+src/frontend/coverage/
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# -----------------------------
+# Environment / secrets
+# -----------------------------
+.env
+.env.*
+!.env.example
+appsettings.*.local.json
+
+# -----------------------------
+# Logs / temp
+# -----------------------------
+*.log
+*.tmp
+.tmp/
+temp/
+tmp/
+
+# Local build logs
+infra_build.log
+infra_msbuild.log

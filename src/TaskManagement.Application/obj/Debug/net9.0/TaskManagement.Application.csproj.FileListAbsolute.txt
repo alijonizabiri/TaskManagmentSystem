@@ -13,3 +13,9 @@ C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.A
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\refint\TaskManagement.Application.dll
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\TaskManagement.Application.pdb
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\ref\TaskManagement.Application.dll
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\TaskManagement.Application.sourcelink.json
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0_verify\TaskManagement.Application.deps.json
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0_verify\TaskManagement.Application.dll
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0_verify\TaskManagement.Application.pdb
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0_verify\TaskManagement.Domain.dll
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0_verify\TaskManagement.Domain.pdb
