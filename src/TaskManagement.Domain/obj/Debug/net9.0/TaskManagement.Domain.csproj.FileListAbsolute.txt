@@ -1,0 +1,11 @@
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\bin\Debug\net9.0\TaskManagement.Domain.deps.json
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\bin\Debug\net9.0\TaskManagement.Domain.dll
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\bin\Debug\net9.0\TaskManagement.Domain.pdb
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.AssemblyInfoInputs.cache
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.AssemblyInfo.cs
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.csproj.CoreCompileInputs.cache
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.dll
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\refint\TaskManagement.Domain.dll
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.pdb
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\ref\TaskManagement.Domain.dll

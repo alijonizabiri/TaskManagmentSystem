@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "O9NG4XXBkt0=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\HP\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512"
+  ],
+  "logs": []
+}
