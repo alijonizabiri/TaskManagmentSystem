@@ -194,8 +194,8 @@ export const TeamsPage = () => {
     setEditingTeamId(team.id)
     setEditTeamName(team.name)
     setEditTeamDescription(team.description ?? '')
-    setEditTeamLeadSearch('')
-    setSelectedEditTeamLeadId(null)
+    setEditTeamLeadSearch(team.teamLeadName ?? '')
+    setSelectedEditTeamLeadId(team.teamLeadUserId ?? null)
     setEditTeamLeadDropdownOpen(false)
     setEditModalOpen(true)
   }
@@ -455,6 +455,9 @@ export const TeamsPage = () => {
             >
               <h3 className="text-base font-semibold text-gray-900">{team.name}</h3>
               {team.description ? <p className="mt-1 line-clamp-2 text-xs text-gray-500">{team.description}</p> : null}
+              <p className="mt-1 text-xs text-gray-500">
+                Lead: <span className="font-medium text-gray-700">{team.teamLeadName ?? '-'}</span>
+              </p>
 
               <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-gray-500">
                 <div className="rounded-lg bg-gray-50 px-2 py-1.5">

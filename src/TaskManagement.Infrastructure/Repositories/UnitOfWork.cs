@@ -16,6 +16,8 @@ public class UnitOfWork : IUnitOfWork
     private IRepository<TeamMember>? _teamMembers;
     private IRepository<TeamInvite>? _teamInvites;
     private IRepository<TaskItem>? _taskItems;
+    private IRepository<TaskAttachment>? _taskAttachments;
+    private IRepository<ActivityLog>? _activityLogs;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -37,6 +39,12 @@ public class UnitOfWork : IUnitOfWork
 
     public IRepository<TaskItem> TaskItems =>
         _taskItems ??= new GenericRepository<TaskItem>(_context);
+
+    public IRepository<TaskAttachment> TaskAttachments =>
+        _taskAttachments ??= new GenericRepository<TaskAttachment>(_context);
+
+    public IRepository<ActivityLog> ActivityLogs =>
+        _activityLogs ??= new GenericRepository<ActivityLog>(_context);
 
     public async Task<int> SaveChangesAsync()
     {

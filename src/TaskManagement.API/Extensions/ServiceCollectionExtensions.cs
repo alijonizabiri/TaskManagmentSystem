@@ -13,6 +13,7 @@ using TaskManagement.Domain.Interfaces;
 using TaskManagement.Infrastructure.Authentication;
 using TaskManagement.Infrastructure.Data;
 using TaskManagement.Infrastructure.Repositories;
+using TaskManagement.Infrastructure.Storage;
 
 namespace TaskManagement.API.Extensions;
 
@@ -49,6 +50,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IJwtTokenProvider, JwtTokenProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<ITaskAttachmentStorage, LocalTaskAttachmentStorage>();
 
         return services;
     }

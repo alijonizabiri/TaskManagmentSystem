@@ -63,3 +63,8 @@ tmp/
 # Local build logs
 infra_build.log
 infra_msbuild.log
+src/TaskManagement.Infrastructure/obj/Debug/net9.0/ref/TaskManagement.Infrastructure.dll
+src/TaskManagement.Infrastructure/obj/Debug/net9.0/ref/TaskManagement.Infrastructure.dll
+src/TaskManagement.Infrastructure/obj/Debug/net9.0/refint/TaskManagement.Infrastructure.dll
+src/TaskManagement.Infrastructure/obj/Debug/net9.0/TaskManagement.Infrastructure.AssemblyInfo.cs
+src/TaskManagement.Infrastructure/obj/Debug/net9.0/TaskManagement.Infrastructure.AssemblyInfoInputs.cache

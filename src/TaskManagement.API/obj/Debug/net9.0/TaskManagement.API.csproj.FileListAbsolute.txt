@@ -278,3 +278,4 @@ C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.A
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.API\bin\Debug\net9.0_verify\TaskManagement.Application.pdb
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.API\bin\Debug\net9.0_verify\TaskManagement.Infrastructure.pdb
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.API\bin\Debug\net9.0_verify\TaskManagement.Domain.pdb
+C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.API\bin\Debug\net9.0\TaskManagement.API.staticwebassets.runtime.json

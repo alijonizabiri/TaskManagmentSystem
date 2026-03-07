@@ -1,12 +1,125 @@
 {
   "Version": 1,
-  "Hash": "seoso8kWtVASOeVikJtKwz6ROA3/9X6zjprNhTXgxoQ=",
+  "Hash": "8Gt4CtbCUlBxO73Ey6cTDYzbuhXiCpM5B/BSCqzfOJM=",
   "Source": "TaskManagement.API",
   "BasePath": "_content/TaskManagement.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "TaskManagement.API\\wwwroot",
+      "Source": "TaskManagement.API",
+      "ContentRoot": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.API\\wwwroot\\",
+      "BasePath": "_content/TaskManagement.API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.API\\wwwroot\\uploads\\tasks\\58c1b1c5fb5f4bd1b4e904ccc7c86fe4\\20260307070705744_57fdc1cbf6cd485a862e46b82023c811.png",
+      "SourceId": "TaskManagement.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.API\\wwwroot\\",
+      "BasePath": "_content/TaskManagement.API",
+      "RelativePath": "uploads/tasks/58c1b1c5fb5f4bd1b4e904ccc7c86fe4/20260307070705744_57fdc1cbf6cd485a862e46b82023c811#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "on7ijiz4k7",
+      "Integrity": "vF10DY0PZYrD1jO+BxRTY4jBmCyvuagjc/LwqXx67tY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\tasks\\58c1b1c5fb5f4bd1b4e904ccc7c86fe4\\20260307070705744_57fdc1cbf6cd485a862e46b82023c811.png"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "uploads/tasks/58c1b1c5fb5f4bd1b4e904ccc7c86fe4/20260307070705744_57fdc1cbf6cd485a862e46b82023c811.on7ijiz4k7.png",
+      "AssetFile": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.API\\wwwroot\\uploads\\tasks\\58c1b1c5fb5f4bd1b4e904ccc7c86fe4\\20260307070705744_57fdc1cbf6cd485a862e46b82023c811.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "54658"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vF10DY0PZYrD1jO+BxRTY4jBmCyvuagjc/LwqXx67tY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 07 Mar 2026 07:07:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "on7ijiz4k7"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/tasks/58c1b1c5fb5f4bd1b4e904ccc7c86fe4/20260307070705744_57fdc1cbf6cd485a862e46b82023c811.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-vF10DY0PZYrD1jO+BxRTY4jBmCyvuagjc/LwqXx67tY="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/tasks/58c1b1c5fb5f4bd1b4e904ccc7c86fe4/20260307070705744_57fdc1cbf6cd485a862e46b82023c811.png",
+      "AssetFile": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.API\\wwwroot\\uploads\\tasks\\58c1b1c5fb5f4bd1b4e904ccc7c86fe4\\20260307070705744_57fdc1cbf6cd485a862e46b82023c811.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "54658"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vF10DY0PZYrD1jO+BxRTY4jBmCyvuagjc/LwqXx67tY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 07 Mar 2026 07:07:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-vF10DY0PZYrD1jO+BxRTY4jBmCyvuagjc/LwqXx67tY="
+        }
+      ]
+    }
+  ]
 }

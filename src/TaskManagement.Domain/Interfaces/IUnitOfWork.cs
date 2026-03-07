@@ -13,6 +13,8 @@ public interface IUnitOfWork : IDisposable
     IRepository<TeamMember> TeamMembers { get; }
     IRepository<TeamInvite> TeamInvites { get; }
     IRepository<TaskItem> TaskItems { get; }
+    IRepository<TaskAttachment> TaskAttachments { get; }
+    IRepository<ActivityLog> ActivityLogs { get; }
 
     /// <summary>
     /// Commits all pending changes to the database.

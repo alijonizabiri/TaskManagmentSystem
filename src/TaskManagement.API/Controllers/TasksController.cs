@@ -74,6 +74,18 @@ public class TasksController : BaseApiController
         return Ok(task);
     }
 
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> UpdateTask(Guid id, [FromBody] UpdateTaskDto dto)
+    {
+        var userId = GetCurrentUserId();
+        var result = await _taskService.UpdateTaskAsync(id, dto, userId);
+
+        if (!result.Success)
+            return BadRequest(new MessageResponseDto(result.Message));
+
+        return Ok(new MessageResponseDto(result.Message));
+    }
+
     [HttpPatch("{id}/status")]
     public async Task<IActionResult> UpdateTaskStatus(Guid id, [FromBody] UpdateTaskStatusDto dto)
     {
@@ -92,6 +104,49 @@ public class TasksController : BaseApiController
     {
         var userId = GetCurrentUserId();
         var result = await _taskService.AssignTaskAsync(id, dto, userId);
+
+        if (!result.Success)
+            return BadRequest(new MessageResponseDto(result.Message));
+
+        return Ok(new MessageResponseDto(result.Message));
+    }
+
+    [HttpGet("{id}/attachments")]
+    public async Task<IActionResult> GetAttachments(Guid id)
+    {
+        var userId = GetCurrentUserId();
+        var attachments = await _taskService.GetAttachmentsAsync(id, userId);
+        return Ok(attachments);
+    }
+
+    [HttpPost("{id}/attachments")]
+    [RequestSizeLimit(10 * 1024 * 1024)]
+    public async Task<IActionResult> UploadAttachment(Guid id, [FromForm] IFormFile file, CancellationToken cancellationToken)
+    {
+        if (file is null || file.Length == 0)
+            return BadRequest(new MessageResponseDto("Attachment file is required."));
+
+        await using var stream = file.OpenReadStream();
+        using var memoryStream = new MemoryStream();
+        await stream.CopyToAsync(memoryStream, cancellationToken);
+
+        var dto = new UploadTaskAttachmentDto
+        {
+            FileName = file.FileName,
+            ContentType = file.ContentType,
+            Content = memoryStream.ToArray()
+        };
+
+        var userId = GetCurrentUserId();
+        var attachment = await _taskService.UploadAttachmentAsync(id, dto, userId);
+        return Ok(attachment);
+    }
+
+    [HttpDelete("{id}/attachments/{attachmentId}")]
+    public async Task<IActionResult> DeleteAttachment(Guid id, Guid attachmentId)
+    {
+        var userId = GetCurrentUserId();
+        var result = await _taskService.DeleteAttachmentAsync(id, attachmentId, userId);
 
         if (!result.Success)
             return BadRequest(new MessageResponseDto(result.Message));

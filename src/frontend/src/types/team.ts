@@ -8,6 +8,8 @@ export type Team = {
   id: string
   name: string
   description?: string | null
+  teamLeadUserId?: string | null
+  teamLeadName?: string | null
   memberCount: number
   taskCount: number
   completedTaskCount: number
@@ -19,6 +21,8 @@ export type TeamDetail = {
   id: string
   name: string
   description?: string | null
+  teamLeadUserId?: string | null
+  teamLeadName?: string | null
   memberCount: number
   taskCount: number
   completedTaskCount: number

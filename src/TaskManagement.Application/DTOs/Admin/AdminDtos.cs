@@ -52,3 +52,25 @@ public class UserPerformanceDto
     public string Email { get; set; } = string.Empty;
     public int CompletedTasks { get; set; }
 }
+
+public class ActivityLogQueryDto
+{
+    public string? Action { get; set; }
+    public string? EntityName { get; set; }
+    public Guid? ActorUserId { get; set; }
+    public string? Search { get; set; }
+    public int Page { get; set; } = 1;
+    public int PageSize { get; set; } = 10;
+}
+
+public class ActivityLogDto
+{
+    public Guid Id { get; set; }
+    public Guid ActorUserId { get; set; }
+    public string ActorName { get; set; } = string.Empty;
+    public string Action { get; set; } = string.Empty;
+    public string EntityName { get; set; } = string.Empty;
+    public Guid? EntityId { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+}

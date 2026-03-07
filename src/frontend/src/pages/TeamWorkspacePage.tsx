@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { Activity, CheckCheck, ListChecks, Plus, Timer } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
@@ -8,23 +8,23 @@ import { Input } from '@/components/ui/Input'
 import { Select } from '@/components/ui/Select'
 import { StatCard } from '@/components/ui/StatCard'
 import { CreateTaskModal } from '@/components/tasks/CreateTaskModal'
+import { TaskDrawer } from '@/components/tasks/TaskDrawer'
 import { KanbanBoard } from '@/components/kanban/KanbanBoard'
 import { teamService } from '@/services/teamService'
 import { taskService } from '@/services/taskService'
 import { useAuth } from '@/hooks/useAuth'
-import type { TaskItem, TaskPriority } from '@/types/task'
-import { boardColumns, columnToStatus, getBoardColumnId, taskPriorityLabel, taskStatusLabel } from '@/utils/task'
-import { timeAgo } from '@/utils/format'
+import type { TaskItem, TaskPriority, UpdateTaskRequest } from '@/types/task'
+import { boardColumns, columnToStatus, getBoardColumnId, taskPriorityLabel } from '@/utils/task'
 
 type StatusFilter = 'all' | 'backlog' | 'todo' | 'inprogress' | 'done'
 
 export const TeamWorkspacePage = () => {
   const { teamId } = useParams<{ teamId: string }>()
-  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { canCreateTasks, canInviteUsers } = useAuth()
 
   const [isCreateModalOpen, setCreateModalOpen] = useState(false)
+  const [activeTaskId, setActiveTaskId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [assigneeFilter, setAssigneeFilter] = useState('')
   const [priorityFilter, setPriorityFilter] = useState('')
@@ -54,12 +54,6 @@ export const TeamWorkspacePage = () => {
     enabled: Boolean(teamId)
   })
 
-  const activitiesQuery = useQuery({
-    queryKey: ['team-activities', teamId],
-    queryFn: () => teamService.getTeamActivities(teamId!),
-    enabled: Boolean(teamId)
-  })
-
   const updateStatusMutation = useMutation({
     mutationFn: ({ taskId, status }: { taskId: string; status: number }) =>
       taskService.updateTaskStatus(taskId, { status }),
@@ -81,7 +75,6 @@ export const TeamWorkspacePage = () => {
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ['team-tasks', teamId] })
       await queryClient.invalidateQueries({ queryKey: ['team-stats', teamId] })
-      await queryClient.invalidateQueries({ queryKey: ['team-activities', teamId] })
     }
   })
 
@@ -121,6 +114,16 @@ export const TeamWorkspacePage = () => {
     const status = columnToStatus(targetColumn)
     updateStatusMutation.mutate({ taskId: task.id, status })
   }
+
+  const quickUpdateMutation = useMutation({
+    mutationFn: ({ taskId, payload }: { taskId: string; payload: UpdateTaskRequest }) =>
+      taskService.updateTask(taskId, payload),
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['team-tasks', teamId] })
+      await queryClient.invalidateQueries({ queryKey: ['team-stats', teamId] })
+      await queryClient.invalidateQueries({ queryKey: ['task', activeTaskId] })
+    }
+  })
 
   if (!teamId) {
     return (
@@ -215,37 +218,28 @@ export const TeamWorkspacePage = () => {
         ) : filteredTasks.length ? (
           <KanbanBoard
             tasks={filteredTasks}
-            onOpenTask={(taskId) => navigate(`/tasks/${taskId}`)}
+            onOpenTask={(taskId) => setActiveTaskId(taskId)}
             onMoveTask={handleMoveTask}
+            onQuickUpdate={(taskId, payload) => quickUpdateMutation.mutate({ taskId, payload })}
+            members={membersQuery.data ?? []}
+            canManageFields={canCreateTasks}
           />
         ) : (
           <p className="text-sm text-gray-500">No tasks match the selected filters.</p>
         )}
       </Card>
 
-      <Card title="Activity Feed" subtitle="Latest activity in this team">
-        {activitiesQuery.isLoading ? (
-          <p className="text-sm text-gray-500">Loading activity...</p>
-        ) : activitiesQuery.data?.length ? (
-          <div className="space-y-3">
-            {activitiesQuery.data.slice(0, 6).map((task) => (
-              <div key={task.id} className="rounded-xl border border-gray-200 bg-gray-50 p-3">
-                <p className="text-sm font-semibold text-gray-900">{task.title}</p>
-                <p className="mt-1 text-xs text-gray-500">
-                  Updated by {task.createdByName} {timeAgo(task.createdAt)}
-                </p>
-                <p className="text-xs text-gray-500">Status: {taskStatusLabel[task.status]}</p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm text-gray-500">No recent activity.</p>
-        )}
-      </Card>
-
       {canCreateTasks ? (
         <CreateTaskModal open={isCreateModalOpen} onClose={() => setCreateModalOpen(false)} teamId={teamId} />
       ) : null}
+
+      <TaskDrawer
+        open={Boolean(activeTaskId)}
+        taskId={activeTaskId}
+        teamId={teamId}
+        members={membersQuery.data ?? []}
+        onClose={() => setActiveTaskId(null)}
+      />
     </div>
   )
 }

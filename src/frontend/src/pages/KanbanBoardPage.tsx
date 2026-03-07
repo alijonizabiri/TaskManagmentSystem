@@ -1,24 +1,24 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { LayoutGrid, Plus, Rows3 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { KanbanBoard } from '@/components/kanban/KanbanBoard'
 import { KanbanTableView } from '@/components/kanban/KanbanTableView'
 import { CreateTaskModal } from '@/components/tasks/CreateTaskModal'
+import { TaskDrawer } from '@/components/tasks/TaskDrawer'
 import { teamService } from '@/services/teamService'
 import { taskService } from '@/services/taskService'
 import { useEnsureSelectedTeam } from '@/hooks/useEnsureSelectedTeam'
 import { useAuth } from '@/hooks/useAuth'
-import type { TaskItem } from '@/types/task'
+import type { TaskItem, UpdateTaskRequest } from '@/types/task'
 import { columnToStatus, type BoardColumnId } from '@/utils/task'
 
 export const KanbanBoardPage = () => {
-  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [isCreateModalOpen, setCreateModalOpen] = useState(false)
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card')
+  const [activeTaskId, setActiveTaskId] = useState<string | null>(null)
   const { canCreateTasks } = useAuth()
 
   const teamsQuery = useQuery({
@@ -31,6 +31,12 @@ export const KanbanBoardPage = () => {
   const tasksQuery = useQuery({
     queryKey: ['tasks', selectedTeamId],
     queryFn: () => taskService.getTasks(selectedTeamId ?? undefined),
+    enabled: Boolean(selectedTeamId)
+  })
+
+  const membersQuery = useQuery({
+    queryKey: ['team-members', selectedTeamId],
+    queryFn: () => teamService.getTeamMembers(selectedTeamId!),
     enabled: Boolean(selectedTeamId)
   })
 
@@ -61,6 +67,15 @@ export const KanbanBoardPage = () => {
     const status = columnToStatus(targetColumn)
     updateStatusMutation.mutate({ taskId: task.id, status })
   }
+
+  const quickUpdateMutation = useMutation({
+    mutationFn: ({ taskId, payload }: { taskId: string; payload: UpdateTaskRequest }) =>
+      taskService.updateTask(taskId, payload),
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['tasks', selectedTeamId] })
+      await queryClient.invalidateQueries({ queryKey: ['task', activeTaskId] })
+    }
+  })
 
   return (
     <div className="space-y-6">
@@ -110,13 +125,16 @@ export const KanbanBoardPage = () => {
           viewMode === 'card' ? (
             <KanbanBoard
               tasks={tasksQuery.data}
-              onOpenTask={(taskId) => navigate(`/tasks/${taskId}`)}
+              onOpenTask={(taskId) => setActiveTaskId(taskId)}
               onMoveTask={handleMoveTask}
+              onQuickUpdate={(taskId, payload) => quickUpdateMutation.mutate({ taskId, payload })}
+              members={membersQuery.data ?? []}
+              canManageFields={canCreateTasks}
             />
           ) : (
             <KanbanTableView
               tasks={tasksQuery.data}
-              onOpenTask={(taskId) => navigate(`/tasks/${taskId}`)}
+              onOpenTask={(taskId) => setActiveTaskId(taskId)}
               onMoveTask={handleMoveTask}
             />
           )
@@ -134,6 +152,16 @@ export const KanbanBoardPage = () => {
 
       {selectedTeamId && canCreateTasks ? (
         <CreateTaskModal open={isCreateModalOpen} onClose={() => setCreateModalOpen(false)} teamId={selectedTeamId} />
+      ) : null}
+
+      {selectedTeamId ? (
+        <TaskDrawer
+          open={Boolean(activeTaskId)}
+          taskId={activeTaskId}
+          teamId={selectedTeamId}
+          members={membersQuery.data ?? []}
+          onClose={() => setActiveTaskId(null)}
+        />
       ) : null}
     </div>
   )

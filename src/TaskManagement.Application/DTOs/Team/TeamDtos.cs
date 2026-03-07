@@ -27,6 +27,8 @@ public class TeamResponseDto
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
+    public Guid? TeamLeadUserId { get; set; }
+    public string? TeamLeadName { get; set; }
     public int MemberCount { get; set; }
     public int TaskCount { get; set; }
     public int CompletedTaskCount { get; set; }
@@ -39,6 +41,8 @@ public class TeamDetailDto
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
+    public Guid? TeamLeadUserId { get; set; }
+    public string? TeamLeadName { get; set; }
     public int MemberCount { get; set; }
     public int TaskCount { get; set; }
     public int CompletedTaskCount { get; set; }

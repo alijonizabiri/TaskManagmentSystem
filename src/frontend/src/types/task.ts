@@ -24,6 +24,7 @@ export type TaskItem = {
   teamId: string
   createdByName: string
   createdAt: string
+  attachments?: TaskAttachment[]
 }
 
 export type CreateTaskRequest = {
@@ -43,6 +44,17 @@ export type AssignTaskRequest = {
   assigneeId: string
 }
 
+export type UpdateTaskRequest = {
+  title?: string
+  description?: string
+  status?: TaskStatus
+  priority?: TaskPriority
+  deadline?: string
+  clearDeadline?: boolean
+  assigneeId?: string
+  clearAssignee?: boolean
+}
+
 export type TaskComment = {
   id: string
   author: string
@@ -53,5 +65,10 @@ export type TaskComment = {
 export type TaskAttachment = {
   id: string
   fileName: string
-  size: string
+  contentType?: string
+  sizeBytes?: number
+  size?: string
+  url?: string
+  uploadedByName?: string
+  createdAt?: string
 }

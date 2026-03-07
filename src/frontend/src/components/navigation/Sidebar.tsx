@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { ClipboardList, KanbanSquare, LogOut, Settings, ShieldCheck, Users, X } from 'lucide-react'
+import { ClipboardList, FileText, KanbanSquare, LogOut, Settings, ShieldCheck, Users, X } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { useAuthStore } from '@/store/authStore'
 import { useTeamStore } from '@/store/teamStore'
@@ -26,7 +26,8 @@ export const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
   const adminItems: NavItem[] = [
     { label: 'Dashboard', to: '/admin/dashboard', icon: ShieldCheck },
     { label: 'Teams', to: '/teams', icon: Users, end: false },
-    { label: 'User Management', to: '/admin/users', icon: Users }
+    { label: 'User Management', to: '/admin/users', icon: Users },
+    { label: 'Logs', to: '/admin/logs', icon: FileText }
   ]
 
   const workspaceItems: NavItem[] = [

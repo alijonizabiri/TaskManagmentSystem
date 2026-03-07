@@ -45,6 +45,7 @@ public class TeamService : ITeamService
 
         var assignedTeamLeadId = await ResolveTeamLeadIdAsync(dto.TeamLeadId, actor);
         await ApplyTeamLeadMembershipAsync(team.Id, assignedTeamLeadId);
+        await AddAdminLogIfNeededAsync(actor, "Create", "Team", team.Id, $"Created team '{team.Name}'.");
 
         await _unitOfWork.SaveChangesAsync();
 
@@ -79,6 +80,7 @@ public class TeamService : ITeamService
 
         var assignedTeamLeadId = await ResolveTeamLeadIdAsync(dto.TeamLeadId, actor);
         await ApplyTeamLeadMembershipAsync(team.Id, assignedTeamLeadId);
+        await AddAdminLogIfNeededAsync(actor, "Update", "Team", team.Id, $"Updated team '{team.Name}'.");
 
         await _unitOfWork.SaveChangesAsync();
         return await BuildTeamResponseAsync(team);
@@ -100,6 +102,7 @@ public class TeamService : ITeamService
             await EnsureTeamAccessAsync(teamId, actor);
         }
 
+        await AddAdminLogIfNeededAsync(actor, "Delete", "Team", team.Id, $"Deleted team '{team.Name}'.");
         _unitOfWork.Teams.Remove(team);
         await _unitOfWork.SaveChangesAsync();
     }
@@ -152,12 +155,15 @@ public class TeamService : ITeamService
         var memberCount = (await _unitOfWork.TeamMembers.FindAsync(tm => tm.TeamId == teamId)).Count();
         var tasks = (await _unitOfWork.TaskItems.FindAsync(t => t.TeamId == teamId)).ToList();
         var completedTaskCount = tasks.Count(t => t.Status == TaskStatus.Done);
+        var (teamLeadUserId, teamLeadName) = await GetTeamLeadAsync(teamId);
 
         return new TeamDetailDto
         {
             Id = team.Id,
             Name = team.Name,
             Description = team.Description,
+            TeamLeadUserId = teamLeadUserId,
+            TeamLeadName = teamLeadName,
             MemberCount = memberCount,
             TaskCount = tasks.Count,
             CompletedTaskCount = completedTaskCount,
@@ -258,6 +264,7 @@ public class TeamService : ITeamService
         };
 
         await _unitOfWork.TeamInvites.AddAsync(invite);
+        await AddAdminLogIfNeededAsync(actor, "Create", "TeamInvite", invite.Id, $"Created invite for '{dto.Email}' in team '{team.Name}'.");
         await _unitOfWork.SaveChangesAsync();
 
         return new TeamInviteResponseDto
@@ -343,18 +350,55 @@ public class TeamService : ITeamService
         var memberCount = (await _unitOfWork.TeamMembers.FindAsync(tm => tm.TeamId == team.Id)).Count();
         var tasks = (await _unitOfWork.TaskItems.FindAsync(t => t.TeamId == team.Id)).ToList();
         var completedTaskCount = tasks.Count(t => t.Status == TaskStatus.Done);
+        var (teamLeadUserId, teamLeadName) = await GetTeamLeadAsync(team.Id);
 
         return new TeamResponseDto
         {
             Id = team.Id,
             Name = team.Name,
             Description = team.Description,
+            TeamLeadUserId = teamLeadUserId,
+            TeamLeadName = teamLeadName,
             MemberCount = memberCount,
             TaskCount = tasks.Count,
             CompletedTaskCount = completedTaskCount,
             CompletionPercentage = CalculatePercentage(completedTaskCount, tasks.Count),
             CreatedAt = team.CreatedAt
         };
+    }
+
+    private async Task<(Guid? TeamLeadUserId, string? TeamLeadName)> GetTeamLeadAsync(Guid teamId)
+    {
+        var leadMembership = (await _unitOfWork.TeamMembers
+                .FindAsync(tm => tm.TeamId == teamId && tm.Role == Role.TeamLead))
+            .FirstOrDefault();
+
+        if (leadMembership is null)
+            return (null, null);
+
+        var leadUser = await _unitOfWork.Users.GetByIdAsync(leadMembership.UserId);
+        if (leadUser is null)
+            return (leadMembership.UserId, null);
+
+        return (leadUser.Id, leadUser.FullName);
+    }
+
+    private async Task AddAdminLogIfNeededAsync(User actor, string action, string entityName, Guid? entityId, string description)
+    {
+        if (actor.Role != Role.Admin)
+            return;
+
+        await _unitOfWork.ActivityLogs.AddAsync(new ActivityLog
+        {
+            Id = Guid.NewGuid(),
+            ActorUserId = actor.Id,
+            ActorName = actor.FullName,
+            Action = action,
+            EntityName = entityName,
+            EntityId = entityId,
+            Description = description,
+            CreatedAt = DateTime.UtcNow
+        });
     }
 
     private static decimal CalculatePercentage(int numerator, int denominator)

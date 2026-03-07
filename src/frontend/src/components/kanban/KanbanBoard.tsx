@@ -14,18 +14,30 @@ import { boardColumns, columnToStatus, getBoardColumnId, type BoardColumnId } fr
 import { KanbanColumn } from '@/components/kanban/KanbanColumn'
 import { SortableTaskCard } from '@/components/kanban/SortableTaskCard'
 import { TaskCard } from '@/components/tasks/TaskCard'
+import type { TeamMember } from '@/types/team'
+import type { UpdateTaskRequest } from '@/types/task'
 
 type KanbanBoardProps = {
   tasks: TaskItem[]
   onOpenTask: (taskId: string) => void
   onMoveTask: (task: TaskItem, targetColumn: BoardColumnId) => void
+  onQuickUpdate?: (taskId: string, payload: UpdateTaskRequest) => void
+  members?: TeamMember[]
+  canManageFields?: boolean
 }
 
 const isColumnId = (value: string): value is BoardColumnId => {
   return ['backlog', 'todo', 'inprogress', 'done'].includes(value)
 }
 
-export const KanbanBoard = ({ tasks, onOpenTask, onMoveTask }: KanbanBoardProps) => {
+export const KanbanBoard = ({
+  tasks,
+  onOpenTask,
+  onMoveTask,
+  onQuickUpdate,
+  members = [],
+  canManageFields = false
+}: KanbanBoardProps) => {
   const [boardTasks, setBoardTasks] = useState<TaskItem[]>(tasks)
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null)
 
@@ -108,7 +120,15 @@ export const KanbanBoard = ({ tasks, onOpenTask, onMoveTask }: KanbanBoardProps)
       <div className="grid gap-4 lg:grid-cols-4">
         {boardColumns.map((column) => (
           <KanbanColumn key={column.id} id={column.id} title={column.title} tasks={grouped[column.id]}>
-            {(task) => <SortableTaskCard task={task} onOpenTask={onOpenTask} />}
+            {(task) => (
+              <SortableTaskCard
+                task={task}
+                onOpenTask={onOpenTask}
+                onQuickUpdate={onQuickUpdate}
+                members={members}
+                canManageFields={canManageFields}
+              />
+            )}
           </KanbanColumn>
         ))}
       </div>
@@ -116,7 +136,7 @@ export const KanbanBoard = ({ tasks, onOpenTask, onMoveTask }: KanbanBoardProps)
       <DragOverlay>
         {activeTask ? (
           <div className="w-[340px]">
-            <TaskCard task={activeTask} onOpen={() => {}} />
+            <TaskCard task={activeTask} onOpen={() => {}} members={members} canManageFields={canManageFields} />
           </div>
         ) : null}
       </DragOverlay>

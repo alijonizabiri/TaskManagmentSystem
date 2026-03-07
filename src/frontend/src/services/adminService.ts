@@ -43,6 +43,34 @@ export type UserPerformance = {
   completedTasks: number
 }
 
+export type AdminActivityLog = {
+  id: string
+  actorUserId: string
+  actorName: string
+  action: string
+  entityName: string
+  entityId?: string | null
+  description: string
+  createdAt: string
+}
+
+export type AdminActivityLogQuery = {
+  action?: string
+  entityName?: string
+  actorUserId?: string
+  search?: string
+  page?: number
+  pageSize?: number
+}
+
+export type PagedResult<T> = {
+  items: T[]
+  page: number
+  pageSize: number
+  totalCount: number
+  totalPages: number
+}
+
 export const adminService = {
   getDashboard() {
     return apiClient.request<AdminDashboard>('/admin/dashboard')
@@ -82,6 +110,11 @@ export const adminService = {
   },
   getTasks() {
     return apiClient.request<TaskItem[]>('/admin/tasks')
+  },
+  getActivityLogs(query: AdminActivityLogQuery) {
+    return apiClient.request<PagedResult<AdminActivityLog>>('/admin/logs', {
+      query
+    })
   },
   addUserToTeam(teamId: string, userId: string) {
     return apiClient.request<{ message: string }>(`/admin/teams/${teamId}/members/${userId}`, {

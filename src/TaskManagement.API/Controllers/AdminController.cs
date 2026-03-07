@@ -120,6 +120,14 @@ public class AdminController : BaseApiController
         return Ok(tasks);
     }
 
+    [HttpGet("logs")]
+    public async Task<IActionResult> GetActivityLogs([FromQuery] ActivityLogQueryDto query)
+    {
+        var actorUserId = GetCurrentUserId();
+        var logs = await _adminService.GetActivityLogsAsync(actorUserId, query);
+        return Ok(logs);
+    }
+
     [HttpPost("teams/{teamId}/members/{userId}")]
     public async Task<IActionResult> AddUserToTeam(Guid teamId, Guid userId)
     {

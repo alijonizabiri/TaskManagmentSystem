@@ -5,6 +5,7 @@ import { DashboardLayout } from '@/layouts/DashboardLayout'
 import { LoginPage } from '@/pages/LoginPage'
 import { AdminDashboardPage } from '@/pages/AdminDashboardPage'
 import { UserManagementPage } from '@/pages/UserManagementPage'
+import { AdminLogsPage } from '@/pages/AdminLogsPage'
 import { TeamsPage } from '@/pages/TeamsPage'
 import { TeamWorkspacePage } from '@/pages/TeamWorkspacePage'
 import { TeamKanbanRedirectPage } from '@/pages/TeamKanbanRedirectPage'
@@ -55,6 +56,7 @@ export const AppRouter = () => {
             <Route element={<RoleRoute allowedRoles={[Role.Admin]} />}>
               <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
               <Route path="/admin/users" element={<UserManagementPage />} />
+              <Route path="/admin/logs" element={<AdminLogsPage />} />
             </Route>
           </Route>
         </Route>

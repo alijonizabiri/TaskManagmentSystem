@@ -1,4 +1,5 @@
 using TaskManagement.Application.DTOs.Admin;
+using TaskManagement.Application.DTOs.Common;
 using TaskManagement.Application.DTOs.Task;
 using TaskManagement.Application.DTOs.Team;
 using TaskManagement.Domain.Enums;
@@ -18,4 +19,5 @@ public interface IAdminService
     Task<IEnumerable<TeamResponseDto>> GetAllTeamsAsync(Guid actorUserId);
     Task<IEnumerable<TaskResponseDto>> GetAllTasksAsync(Guid actorUserId);
     Task<MessageResult> AddUserToTeamAsync(Guid actorUserId, Guid teamId, Guid userId);
+    Task<PagedResultDto<ActivityLogDto>> GetActivityLogsAsync(Guid actorUserId, ActivityLogQueryDto query);
 }

@@ -22,6 +22,105 @@ namespace TaskManagement.Infrastructure.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("TaskManagement.Domain.Entities.ActivityLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<string>("ActorName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<Guid>("ActorUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<Guid?>("EntityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("EntityName")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Action");
+
+                    b.HasIndex("ActorUserId");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("EntityName");
+
+                    b.ToTable("ActivityLogs");
+                });
+
+            modelBuilder.Entity("TaskManagement.Domain.Entities.TaskAttachment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("RelativePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<long>("SizeBytes")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<Guid>("TaskItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UploadedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskItemId");
+
+                    b.HasIndex("UploadedBy");
+
+                    b.ToTable("TaskAttachments", (string)null);
+                });
+
             modelBuilder.Entity("TaskManagement.Domain.Entities.TaskItem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -208,6 +307,36 @@ namespace TaskManagement.Infrastructure.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("TaskManagement.Domain.Entities.ActivityLog", b =>
+                {
+                    b.HasOne("TaskManagement.Domain.Entities.User", "Actor")
+                        .WithMany("ActivityLogs")
+                        .HasForeignKey("ActorUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Actor");
+                });
+
+            modelBuilder.Entity("TaskManagement.Domain.Entities.TaskAttachment", b =>
+                {
+                    b.HasOne("TaskManagement.Domain.Entities.TaskItem", "TaskItem")
+                        .WithMany("Attachments")
+                        .HasForeignKey("TaskItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TaskManagement.Domain.Entities.User", "UploadedByUser")
+                        .WithMany("UploadedTaskAttachments")
+                        .HasForeignKey("UploadedBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TaskItem");
+
+                    b.Navigation("UploadedByUser");
+                });
+
             modelBuilder.Entity("TaskManagement.Domain.Entities.TaskItem", b =>
                 {
                     b.HasOne("TaskManagement.Domain.Entities.User", "Assignee")
@@ -275,6 +404,11 @@ namespace TaskManagement.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TaskManagement.Domain.Entities.TaskItem", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
             modelBuilder.Entity("TaskManagement.Domain.Entities.Team", b =>
                 {
                     b.Navigation("Invites");
@@ -286,6 +420,8 @@ namespace TaskManagement.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("TaskManagement.Domain.Entities.User", b =>
                 {
+                    b.Navigation("ActivityLogs");
+
                     b.Navigation("AssignedTasks");
 
                     b.Navigation("CreatedTasks");
@@ -293,6 +429,8 @@ namespace TaskManagement.Infrastructure.Data.Migrations
                     b.Navigation("CreatedTeams");
 
                     b.Navigation("TeamMemberships");
+
+                    b.Navigation("UploadedTaskAttachments");
                 });
 #pragma warning restore 612, 618
         }

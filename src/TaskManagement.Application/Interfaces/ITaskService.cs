@@ -14,6 +14,10 @@ public interface ITaskService
         Guid teamId,
         Guid? createdByUserId = null);
     Task<TaskResponseDto> GetTaskByIdAsync(Guid taskId, Guid requestingUserId);
+    Task<MessageResult> UpdateTaskAsync(Guid taskId, UpdateTaskDto dto, Guid requestingUserId);
     Task<MessageResult> UpdateTaskStatusAsync(Guid taskId, UpdateTaskStatusDto dto, Guid requestingUserId);
     Task<MessageResult> AssignTaskAsync(Guid taskId, AssignTaskDto dto, Guid requestingUserId);
+    Task<IEnumerable<TaskAttachmentDto>> GetAttachmentsAsync(Guid taskId, Guid requestingUserId);
+    Task<TaskAttachmentDto> UploadAttachmentAsync(Guid taskId, UploadTaskAttachmentDto dto, Guid requestingUserId);
+    Task<MessageResult> DeleteAttachmentAsync(Guid taskId, Guid attachmentId, Guid requestingUserId);
 }

@@ -1,4 +1,5 @@
 using TaskManagement.Application.DTOs.Admin;
+using TaskManagement.Application.DTOs.Common;
 using TaskManagement.Application.DTOs.Task;
 using TaskManagement.Application.DTOs.Team;
 using TaskManagement.Application.Interfaces;
@@ -146,7 +147,7 @@ public class AdminService : IAdminService
 
     public async Task<MessageResult> ApproveUserAsync(Guid actorUserId, Guid userId)
     {
-        await EnsureAdminAsync(actorUserId);
+        var actor = await EnsureAdminAsync(actorUserId);
 
         var user = await _unitOfWork.Users.GetByIdAsync(userId);
         if (user is null)
@@ -157,6 +158,7 @@ public class AdminService : IAdminService
 
         user.IsApproved = true;
         _unitOfWork.Users.Update(user);
+        await AddAdminLogAsync(actor, "Update", "User", user.Id, $"Approved user '{user.FullName}'.");
         await _unitOfWork.SaveChangesAsync();
 
         return MessageResult.Ok($"User '{user.FullName}' has been approved.");
@@ -164,7 +166,7 @@ public class AdminService : IAdminService
 
     public async Task<MessageResult> RejectUserAsync(Guid actorUserId, Guid userId)
     {
-        await EnsureAdminAsync(actorUserId);
+        var actor = await EnsureAdminAsync(actorUserId);
 
         var user = await _unitOfWork.Users.GetByIdAsync(userId);
         if (user is null)
@@ -174,6 +176,7 @@ public class AdminService : IAdminService
             return MessageResult.Fail("Cannot reject an already approved user.");
 
         _unitOfWork.Users.Remove(user);
+        await AddAdminLogAsync(actor, "Delete", "User", user.Id, $"Rejected and removed user '{user.FullName}'.");
         await _unitOfWork.SaveChangesAsync();
 
         return MessageResult.Ok($"User '{user.FullName}' has been rejected and removed.");
@@ -219,6 +222,7 @@ public class AdminService : IAdminService
             }
         }
 
+        await AddAdminLogAsync(actor, "Update", "User", user.Id, $"Updated role for '{user.FullName}' to '{role}'.");
         await _unitOfWork.SaveChangesAsync();
 
         return MessageResult.Ok($"User role updated to {role}.");
@@ -291,7 +295,7 @@ public class AdminService : IAdminService
 
     public async Task<MessageResult> AddUserToTeamAsync(Guid actorUserId, Guid teamId, Guid userId)
     {
-        await EnsureAdminAsync(actorUserId);
+        var actor = await EnsureAdminAsync(actorUserId);
 
         var team = await _unitOfWork.Teams.GetByIdAsync(teamId);
         if (team is null)
@@ -321,8 +325,71 @@ public class AdminService : IAdminService
             Role = user.Role == Role.TeamLead ? Role.TeamLead : Role.User
         });
 
+        await AddAdminLogAsync(actor, "Create", "TeamMember", null, $"Added '{user.FullName}' to team '{team.Name}'.");
         await _unitOfWork.SaveChangesAsync();
         return MessageResult.Ok("User assigned to team successfully.");
+    }
+
+    public async Task<PagedResultDto<ActivityLogDto>> GetActivityLogsAsync(Guid actorUserId, ActivityLogQueryDto query)
+    {
+        await EnsureAdminAsync(actorUserId);
+
+        var page = query.Page < 1 ? 1 : query.Page;
+        var pageSize = query.PageSize < 1 ? 10 : Math.Min(query.PageSize, 100);
+
+        var logs = (await _unitOfWork.ActivityLogs.GetAllAsync()).AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(query.Action))
+        {
+            logs = logs.Where(x => x.Action.Equals(query.Action.Trim(), StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(query.EntityName))
+        {
+            logs = logs.Where(x => x.EntityName.Equals(query.EntityName.Trim(), StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (query.ActorUserId.HasValue)
+        {
+            logs = logs.Where(x => x.ActorUserId == query.ActorUserId.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(query.Search))
+        {
+            var search = query.Search.Trim().ToLowerInvariant();
+            logs = logs.Where(x =>
+                x.ActorName.ToLower().Contains(search)
+                || x.Description.ToLower().Contains(search)
+                || x.EntityName.ToLower().Contains(search));
+        }
+
+        var ordered = logs.OrderByDescending(x => x.CreatedAt);
+        var totalCount = ordered.Count();
+
+        var items = ordered
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(x => new ActivityLogDto
+            {
+                Id = x.Id,
+                ActorUserId = x.ActorUserId,
+                ActorName = x.ActorName,
+                Action = x.Action,
+                EntityName = x.EntityName,
+                EntityId = x.EntityId,
+                Description = x.Description,
+                CreatedAt = x.CreatedAt
+            })
+            .ToList();
+
+        return new PagedResultDto<ActivityLogDto>
+        {
+            Items = items,
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = totalCount,
+            TotalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pageSize)
+        };
     }
 
     private async Task<User> EnsureAdminAsync(Guid actorUserId)
@@ -357,5 +424,20 @@ public class AdminService : IAdminService
             return 0m;
 
         return Math.Round((decimal)numerator * 100m / denominator, 2);
+    }
+
+    private async Task AddAdminLogAsync(User actor, string action, string entityName, Guid? entityId, string description)
+    {
+        await _unitOfWork.ActivityLogs.AddAsync(new ActivityLog
+        {
+            Id = Guid.NewGuid(),
+            ActorUserId = actor.Id,
+            ActorName = actor.FullName,
+            Action = action,
+            EntityName = entityName,
+            EntityId = entityId,
+            Description = description,
+            CreatedAt = DateTime.UtcNow
+        });
     }
 }

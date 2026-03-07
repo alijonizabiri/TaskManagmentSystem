@@ -32,6 +32,7 @@ public class TaskResponseDto
     public Guid TeamId { get; set; }
     public string CreatedByName { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
+    public IReadOnlyCollection<TaskAttachmentDto> Attachments { get; set; } = Array.Empty<TaskAttachmentDto>();
 }
 
 /// <summary>
@@ -48,4 +49,37 @@ public class UpdateTaskStatusDto
 public class AssignTaskDto
 {
     public Guid AssigneeId { get; set; }
+}
+
+/// <summary>
+/// Request DTO for partial task updates.
+/// </summary>
+public class UpdateTaskDto
+{
+    public string? Title { get; set; }
+    public string? Description { get; set; }
+    public TaskStatus? Status { get; set; }
+    public TaskPriority? Priority { get; set; }
+    public DateTime? Deadline { get; set; }
+    public bool ClearDeadline { get; set; }
+    public Guid? AssigneeId { get; set; }
+    public bool ClearAssignee { get; set; }
+}
+
+public class UploadTaskAttachmentDto
+{
+    public string FileName { get; set; } = string.Empty;
+    public string ContentType { get; set; } = string.Empty;
+    public byte[] Content { get; set; } = Array.Empty<byte>();
+}
+
+public class TaskAttachmentDto
+{
+    public Guid Id { get; set; }
+    public string FileName { get; set; } = string.Empty;
+    public string ContentType { get; set; } = string.Empty;
+    public long SizeBytes { get; set; }
+    public string Url { get; set; } = string.Empty;
+    public string UploadedByName { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
 }

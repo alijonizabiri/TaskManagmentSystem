@@ -4,6 +4,7 @@ import { ApiError, type ApiErrorPayload } from '@/types/api'
 type RequestOptions = Omit<RequestInit, 'body'> & {
   body?: unknown
   query?: Record<string, string | number | boolean | undefined | null>
+  skipAuthRedirect?: boolean
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api'
@@ -59,8 +60,11 @@ export const apiClient = {
         }
       }
 
-      if (response.status === 401) {
+      if (response.status === 401 && !options.skipAuthRedirect && !path.startsWith('/auth/')) {
         useAuthStore.getState().logout()
+        if (window.location.pathname !== '/login') {
+          window.location.replace('/login')
+        }
       }
 
       throw new ApiError(message, response.status)

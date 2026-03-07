@@ -33,4 +33,5 @@ public class TaskItem
     public User? Assignee { get; set; }
     public Team Team { get; set; } = null!;
     public User Creator { get; set; } = null!;
+    public ICollection<TaskAttachment> Attachments { get; set; } = new List<TaskAttachment>();
 }

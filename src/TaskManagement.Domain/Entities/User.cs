@@ -31,5 +31,7 @@ public class User
     public ICollection<TeamMember> TeamMemberships { get; set; } = new List<TeamMember>();
     public ICollection<TaskItem> AssignedTasks { get; set; } = new List<TaskItem>();
     public ICollection<TaskItem> CreatedTasks { get; set; } = new List<TaskItem>();
+    public ICollection<TaskAttachment> UploadedTaskAttachments { get; set; } = new List<TaskAttachment>();
     public ICollection<Team> CreatedTeams { get; set; } = new List<Team>();
+    public ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
 }

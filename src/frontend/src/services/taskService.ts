@@ -3,6 +3,8 @@ import type {
   AssignTaskRequest,
   CreateTaskRequest,
   TaskItem,
+  TaskAttachment,
+  UpdateTaskRequest,
   UpdateTaskStatusRequest
 } from '@/types/task'
 
@@ -37,10 +39,33 @@ export const taskService = {
       body: payload
     })
   },
+  updateTask(taskId: string, payload: UpdateTaskRequest) {
+    return apiClient.request<{ message: string }>(`/tasks/${taskId}`, {
+      method: 'PATCH',
+      body: payload
+    })
+  },
   assignTask(taskId: string, payload: AssignTaskRequest) {
     return apiClient.request<{ message: string }>(`/tasks/${taskId}/assign`, {
       method: 'PATCH',
       body: payload
+    })
+  },
+  getAttachments(taskId: string) {
+    return apiClient.request<TaskAttachment[]>(`/tasks/${taskId}/attachments`)
+  },
+  uploadAttachment(taskId: string, file: File) {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    return apiClient.request<TaskAttachment>(`/tasks/${taskId}/attachments`, {
+      method: 'POST',
+      body: formData
+    })
+  },
+  deleteAttachment(taskId: string, attachmentId: string) {
+    return apiClient.request<{ message: string }>(`/tasks/${taskId}/attachments/${attachmentId}`, {
+      method: 'DELETE'
     })
   }
 }
