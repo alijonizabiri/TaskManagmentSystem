@@ -9,6 +9,8 @@ public interface IAuthService
 {
     Task<MessageResult> RegisterAsync(RegisterDto dto);
     Task<AuthResponseDto> LoginAsync(LoginDto dto);
+    Task<AuthResponseDto> LoginTelegramBotAsync(TelegramBotLoginDto dto);
+    Task<AuthResponseDto> LoginTelegramBotByUsernameAsync(TelegramBotUsernameLoginDto dto);
 }
 
 /// <summary>

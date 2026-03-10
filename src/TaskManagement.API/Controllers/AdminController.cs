@@ -104,6 +104,18 @@ public class AdminController : BaseApiController
         return Ok(new MessageResponseDto(result.Message));
     }
 
+    [HttpPatch("users/{id}/telegram")]
+    public async Task<IActionResult> UpdateTelegramUsername(Guid id, [FromBody] UpdateTelegramUsernameDto dto)
+    {
+        var actorUserId = GetCurrentUserId();
+        var result = await _adminService.UpdateTelegramUsernameAsync(actorUserId, id, dto.TelegramUsername);
+
+        if (!result.Success)
+            return BadRequest(new MessageResponseDto(result.Message));
+
+        return Ok(new MessageResponseDto(result.Message));
+    }
+
     [HttpGet("teams")]
     public async Task<IActionResult> GetAllTeams()
     {

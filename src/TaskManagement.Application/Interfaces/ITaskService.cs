@@ -9,6 +9,7 @@ public interface ITaskService
 {
     Task<TaskResponseDto> CreateTaskAsync(CreateTaskDto dto, Guid createdByUserId);
     Task<IEnumerable<TaskResponseDto>> GetTasksAsync(Guid requestingUserId, Guid? teamId = null);
+    Task<IEnumerable<TaskResponseDto>> GetAssignedTasksAsync(Guid requestingUserId, Guid? teamId = null);
     Task<IEnumerable<TaskResponseDto>> GetActivitiesAsync(
         Guid requestingUserId,
         Guid teamId,

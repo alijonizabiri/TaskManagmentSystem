@@ -17,6 +17,8 @@ public class UserSummaryDto
     public string Email { get; set; } = string.Empty;
     public Role Role { get; set; }
     public bool IsApproved { get; set; }
+    public string? TelegramUsername { get; set; }
+    public bool HasTelegramChatLinked { get; set; }
     public DateTime? LastSeenAt { get; set; }
     public DateTime CreatedAt { get; set; }
 }
@@ -24,6 +26,11 @@ public class UserSummaryDto
 public class UpdateUserRoleDto
 {
     public Role Role { get; set; }
+}
+
+public class UpdateTelegramUsernameDto
+{
+    public string? TelegramUsername { get; set; }
 }
 
 public class AdminDashboardDto

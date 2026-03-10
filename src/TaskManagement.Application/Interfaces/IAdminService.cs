@@ -16,6 +16,7 @@ public interface IAdminService
     Task<MessageResult> ApproveUserAsync(Guid actorUserId, Guid userId);
     Task<MessageResult> RejectUserAsync(Guid actorUserId, Guid userId);
     Task<MessageResult> UpdateUserRoleAsync(Guid actorUserId, Guid userId, Role role);
+    Task<MessageResult> UpdateTelegramUsernameAsync(Guid actorUserId, Guid userId, string? telegramUsername);
     Task<IEnumerable<TeamResponseDto>> GetAllTeamsAsync(Guid actorUserId);
     Task<IEnumerable<TaskResponseDto>> GetAllTasksAsync(Guid actorUserId);
     Task<MessageResult> AddUserToTeamAsync(Guid actorUserId, Guid teamId, Guid userId);

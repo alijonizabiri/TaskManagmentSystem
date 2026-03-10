@@ -1,36 +1,43 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.API\\TaskManagement.API.csproj": {}
+    "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.API\\TaskManagement.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.API\\TaskManagement.API.csproj": {
+    "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.API\\TaskManagement.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.API\\TaskManagement.API.csproj",
+        "projectUniqueName": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.API\\TaskManagement.API.csproj",
         "projectName": "TaskManagement.API",
-        "projectPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.API\\TaskManagement.API.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.API\\obj\\",
+        "projectPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.API\\TaskManagement.API.csproj",
+        "packagesPath": "C:\\Users\\Shamsiddin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.API\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Shamsiddin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj": {
-                "projectPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj"
+              "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj": {
+                "projectPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj"
               },
-              "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\TaskManagement.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\TaskManagement.Infrastructure.csproj"
+              "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\TaskManagement.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\TaskManagement.Infrastructure.csproj"
               }
             }
           }
@@ -45,7 +52,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -93,34 +100,41 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.114/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj": {
+    "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj",
+        "projectUniqueName": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj",
         "projectName": "TaskManagement.Application",
-        "projectPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Application\\obj\\",
+        "projectPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj",
+        "packagesPath": "C:\\Users\\Shamsiddin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Application\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Shamsiddin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj": {
-                "projectPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj"
+              "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj": {
+                "projectPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj"
               }
             }
           }
@@ -135,7 +149,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -162,26 +176,33 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.114/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj": {
+    "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj",
         "projectName": "TaskManagement.Domain",
-        "projectPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Domain\\obj\\",
+        "projectPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj",
+        "packagesPath": "C:\\Users\\Shamsiddin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Shamsiddin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -200,7 +221,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -221,37 +242,44 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.114/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\TaskManagement.Infrastructure.csproj": {
+    "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\TaskManagement.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\TaskManagement.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\TaskManagement.Infrastructure.csproj",
         "projectName": "TaskManagement.Infrastructure",
-        "projectPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\TaskManagement.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\obj\\",
+        "projectPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\TaskManagement.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Shamsiddin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Shamsiddin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj": {
-                "projectPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj"
+              "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj": {
+                "projectPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Application\\TaskManagement.Application.csproj"
               },
-              "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj": {
-                "projectPath": "C:\\Users\\HP\\Desktop\\My Work\\My Projects\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj"
+              "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj": {
+                "projectPath": "C:\\Users\\Shamsiddin\\Desktop\\TaskManagmentSystem\\src\\TaskManagement.Domain\\TaskManagement.Domain.csproj"
               }
             }
           }
@@ -266,7 +294,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -311,7 +339,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.114/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

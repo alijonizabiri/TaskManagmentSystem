@@ -299,9 +299,29 @@ namespace TaskManagement.Infrastructure.Data.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
+                    b.Property<long?>("TelegramChatId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TelegramUsername")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("TelegramLinkCode")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<DateTime?>("TelegramLinkCodeExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("TelegramChatId")
+                        .IsUnique();
+
+                    b.HasIndex("TelegramUsername")
                         .IsUnique();
 
                     b.ToTable("Users");
