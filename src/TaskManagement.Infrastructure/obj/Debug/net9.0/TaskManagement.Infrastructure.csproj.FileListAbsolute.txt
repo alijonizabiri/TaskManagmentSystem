@@ -26,3 +26,23 @@ C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.I
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Infrastructure\bin\Debug\net9.0_verify\TaskManagement.Domain.dll
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Infrastructure\bin\Debug\net9.0_verify\TaskManagement.Domain.pdb
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Infrastructure\bin\Debug\net9.0_verify\TaskManagement.Application.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\bin\Debug\net9.0\TaskManagement.Infrastructure.deps.json
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\bin\Debug\net9.0\TaskManagement.Infrastructure.runtimeconfig.json
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\bin\Debug\net9.0\TaskManagement.Infrastructure.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\bin\Debug\net9.0\TaskManagement.Infrastructure.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\bin\Debug\net9.0\TaskManagement.Application.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\bin\Debug\net9.0\TaskManagement.Domain.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\bin\Debug\net9.0\TaskManagement.Domain.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\bin\Debug\net9.0\TaskManagement.Application.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\TaskManagement.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\TaskManagement.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\TaskManagement.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\TaskManagement.Infrastructure.AssemblyInfo.cs
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\TaskManagement.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\TaskManagement.Infrastructure.sourcelink.json
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\TaskMana.BCA0E1A6.Up2Date
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\TaskManagement.Infrastructure.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\refint\TaskManagement.Infrastructure.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\TaskManagement.Infrastructure.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\TaskManagement.Infrastructure.genruntimeconfig.cache
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Infrastructure\obj\Debug\net9.0\ref\TaskManagement.Infrastructure.dll

@@ -49,7 +49,7 @@ public class TasksController : BaseApiController
     public async Task<IActionResult> GetMyTasks([FromQuery] Guid? teamId = null)
     {
         var userId = GetCurrentUserId();
-        var tasks = await _taskService.GetTasksAsync(userId, teamId);
+        var tasks = await _taskService.GetAssignedTasksAsync(userId, teamId);
         return Ok(tasks);
     }
 

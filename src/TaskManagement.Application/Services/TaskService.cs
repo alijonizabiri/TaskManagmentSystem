@@ -117,6 +117,16 @@ public class TaskService : ITaskService
         return await MapTaskListToDtosAsync(tasks.OrderByDescending(t => t.CreatedAt));
     }
 
+    public async Task<IEnumerable<TaskResponseDto>> GetAssignedTasksAsync(Guid requestingUserId, Guid? teamId = null)
+    {
+        var tasks = await GetTasksAsync(requestingUserId, teamId);
+        return tasks
+            .Where(t => t.AssigneeId == requestingUserId)
+            .OrderBy(t => t.Deadline ?? DateTime.MaxValue)
+            .ThenByDescending(t => t.CreatedAt)
+            .ToList();
+    }
+
     /// <summary>
     /// Returns activity feed for a team with optional creator filter.
     /// </summary>

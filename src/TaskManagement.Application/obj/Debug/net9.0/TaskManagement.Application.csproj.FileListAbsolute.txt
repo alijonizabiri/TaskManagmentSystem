@@ -19,3 +19,19 @@ C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.A
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0_verify\TaskManagement.Application.pdb
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0_verify\TaskManagement.Domain.dll
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0_verify\TaskManagement.Domain.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0\TaskManagement.Application.deps.json
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0\TaskManagement.Application.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0\TaskManagement.Application.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0\TaskManagement.Domain.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\bin\Debug\net9.0\TaskManagement.Domain.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\TaskManagement.Application.csproj.AssemblyReference.cache
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\TaskManagement.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\TaskManagement.Application.AssemblyInfoInputs.cache
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\TaskManagement.Application.AssemblyInfo.cs
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\TaskManagement.Application.csproj.CoreCompileInputs.cache
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\TaskManagement.Application.sourcelink.json
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\TaskMana.B5C26166.Up2Date
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\TaskManagement.Application.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\refint\TaskManagement.Application.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\TaskManagement.Application.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Application\obj\Debug\net9.0\ref\TaskManagement.Application.dll

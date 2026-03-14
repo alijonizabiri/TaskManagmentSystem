@@ -35,6 +35,25 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.Migrate();
+    dbContext.Database.ExecuteSqlRaw("""
+        ALTER TABLE "Users"
+        ADD COLUMN IF NOT EXISTS "TelegramChatId" bigint NULL;
+
+        ALTER TABLE "Users"
+        ADD COLUMN IF NOT EXISTS "TelegramLinkCode" character varying(32) NULL;
+
+        ALTER TABLE "Users"
+        ADD COLUMN IF NOT EXISTS "TelegramLinkCodeExpiresAt" timestamp with time zone NULL;
+
+        ALTER TABLE "Users"
+        ADD COLUMN IF NOT EXISTS "TelegramUsername" character varying(64) NULL;
+
+        CREATE UNIQUE INDEX IF NOT EXISTS "IX_Users_TelegramChatId"
+        ON "Users" ("TelegramChatId");
+
+        CREATE UNIQUE INDEX IF NOT EXISTS "IX_Users_TelegramUsername"
+        ON "Users" ("TelegramUsername");
+        """);
 }
 
 app.Run();

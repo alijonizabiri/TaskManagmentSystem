@@ -228,6 +228,42 @@ public class AdminService : IAdminService
         return MessageResult.Ok($"User role updated to {role}.");
     }
 
+    public async Task<MessageResult> UpdateTelegramUsernameAsync(Guid actorUserId, Guid userId, string? telegramUsername)
+    {
+        var actor = await EnsureAdminAsync(actorUserId);
+
+        var user = await _unitOfWork.Users.GetByIdAsync(userId);
+        if (user is null)
+            return MessageResult.Fail("User not found.");
+
+        var normalizedTelegramUsername = NormalizeTelegramUsername(telegramUsername);
+        if (normalizedTelegramUsername is not null)
+        {
+            var duplicate = await _unitOfWork.Users.FirstOrDefaultAsync(u => u.TelegramUsername == normalizedTelegramUsername);
+            if (duplicate is not null && duplicate.Id != user.Id)
+                return MessageResult.Fail("Telegram username is already linked to another user.");
+        }
+
+        user.TelegramUsername = normalizedTelegramUsername;
+        _unitOfWork.Users.Update(user);
+
+        await AddAdminLogAsync(
+            actor,
+            "Update",
+            "User",
+            user.Id,
+            normalizedTelegramUsername is null
+                ? $"Cleared Telegram username for '{user.FullName}'."
+                : $"Updated Telegram username for '{user.FullName}' to '@{normalizedTelegramUsername}'.");
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return MessageResult.Ok(
+            normalizedTelegramUsername is null
+                ? "Telegram username cleared."
+                : "Telegram username updated.");
+    }
+
     public async Task<IEnumerable<TeamResponseDto>> GetAllTeamsAsync(Guid actorUserId)
     {
         await EnsureAdminAsync(actorUserId);
@@ -413,9 +449,20 @@ public class AdminService : IAdminService
             Email = user.Email,
             Role = user.Role,
             IsApproved = user.IsApproved,
+            TelegramUsername = user.TelegramUsername,
+            HasTelegramChatLinked = user.TelegramChatId.HasValue,
             LastSeenAt = user.LastSeenAt,
             CreatedAt = user.CreatedAt
         };
+    }
+
+    private static string? NormalizeTelegramUsername(string? telegramUsername)
+    {
+        if (string.IsNullOrWhiteSpace(telegramUsername))
+            return null;
+
+        var normalized = telegramUsername.Trim().TrimStart('@').ToLowerInvariant();
+        return string.IsNullOrWhiteSpace(normalized) ? null : normalized;
     }
 
     private static decimal CalculatePercentage(int numerator, int denominator)

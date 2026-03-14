@@ -13,3 +13,15 @@ C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.D
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\bin\Debug\net9.0_verify\TaskManagement.Domain.deps.json
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\bin\Debug\net9.0_verify\TaskManagement.Domain.dll
 C:\Users\HP\Desktop\My Work\My Projects\TaskManagmentSystem\src\TaskManagement.Domain\bin\Debug\net9.0_verify\TaskManagement.Domain.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\bin\Debug\net9.0\TaskManagement.Domain.deps.json
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\bin\Debug\net9.0\TaskManagement.Domain.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\bin\Debug\net9.0\TaskManagement.Domain.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.AssemblyInfoInputs.cache
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.AssemblyInfo.cs
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.sourcelink.json
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\refint\TaskManagement.Domain.dll
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\TaskManagement.Domain.pdb
+C:\Users\Shamsiddin\Desktop\TaskManagmentSystem\src\TaskManagement.Domain\obj\Debug\net9.0\ref\TaskManagement.Domain.dll
