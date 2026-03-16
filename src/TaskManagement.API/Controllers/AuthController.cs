@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Application.DTOs.Auth;
 using TaskManagement.Application.DTOs.Common;
@@ -39,6 +40,22 @@ public class AuthController : BaseApiController
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         var response = await _authService.LoginAsync(dto);
+        return Ok(response);
+    }
+
+    [HttpPost("telegram-bot/login")]
+    [AllowAnonymous]
+    public async Task<IActionResult> LoginTelegramBot([FromBody] TelegramBotLoginDto dto)
+    {
+        var response = await _authService.LoginTelegramBotAsync(dto);
+        return Ok(response);
+    }
+
+    [HttpPost("telegram-bot/username-login")]
+    [AllowAnonymous]
+    public async Task<IActionResult> LoginTelegramBotByUsername([FromBody] TelegramBotUsernameLoginDto dto)
+    {
+        var response = await _authService.LoginTelegramBotByUsernameAsync(dto);
         return Ok(response);
     }
 }

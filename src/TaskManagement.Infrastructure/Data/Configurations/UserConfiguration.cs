@@ -20,10 +20,14 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         // Unique index on email to prevent duplicate registrations
         builder.HasIndex(u => u.Email).IsUnique();
+        builder.HasIndex(u => u.TelegramChatId).IsUnique();
+        builder.HasIndex(u => u.TelegramUsername).IsUnique();
 
         builder.Property(u => u.PasswordHash).IsRequired();
         builder.Property(u => u.Role).IsRequired();
         builder.Property(u => u.IsApproved).HasDefaultValue(false);
+        builder.Property(u => u.TelegramUsername).HasMaxLength(64);
+        builder.Property(u => u.TelegramLinkCode).HasMaxLength(32);
         builder.Property(u => u.CreatedAt).HasDefaultValueSql("NOW()");
     }
 }

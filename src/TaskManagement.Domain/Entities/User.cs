@@ -24,6 +24,11 @@ public class User
     /// </summary>
     public bool IsApproved { get; set; }
 
+    public long? TelegramChatId { get; set; }
+    public string? TelegramUsername { get; set; }
+    public string? TelegramLinkCode { get; set; }
+    public DateTime? TelegramLinkCodeExpiresAt { get; set; }
+
     public DateTime? LastSeenAt { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
